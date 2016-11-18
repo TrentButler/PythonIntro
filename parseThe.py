@@ -29,10 +29,31 @@ eXport.write(page.read())
 
 #look for 'the' in the file
 for line in fileinput.input('export.txt'):
+	line.replace("<a >", "")
+	line.replace("<p>", "")
+	line.replace("<header>", "")
+	line.replace("<head>", "")
+	line.replace("<br>","")
+	line.replace("<body>", "")
+	line.replace("<script>", "")
+	line.replace("<title>", "")
+	
+	line.replace("</a>", "")
+	line.replace("</p>", "")
+	line.replace("</header>", "")
+	line.replace("</head>", "")
+	line.replace("</br>","")
+	line.replace("</body>", "")
+	line.replace("</script>", "")
+	line.replace("</title>", "")
+	
+	#line.replace("  ", "")
+	
 	if ' the ' in line:
-		cOunt +=1		
-		#result.write("count: " count)
-		result.write("string found was: \n" + line)
+		cOunt +=1
+		#substring?
+		#result.write("count: " cOunt)
+		result.write("\nstring found was: \n" + line)
 		result.write("\n")
 		#I need a more specific if statement?
 	
@@ -42,10 +63,31 @@ for line in fileinput.input('export.txt'):
 		result.write("\n")
 		#USED WHEN PARSING MY FACEBOOK PAGE....
 		
+	if 'Step ' in line:
+		cOunt +=1
+		result.write("string found was: \n" + line)
+		result.write("\n")
+	
+	if 'step ' in line:
+		cOunt +=1
+		result.write("string found was: \n" + line)
+		result.write("\n")
+	
+	if 'step' in line:
+		cOunt +=1
+		result.write("string found was: \n" + line)
+		result.write("\n")
+	
+	if 'Step' in line:
+		cOunt +=1
+		result.write("string found was: \n" + line)
+		result.write("\n")
 
+
+result.close() #DO NOT FORGET TO CLOSE THE TEXT FILES.....
 os.startfile('result.txt')
 print('count:' , cOunt)
-raw_input()
+
 
 #help = [{'count:' cOunt, 'string found:' line}]
 #parsed_json = json.loads(help)
