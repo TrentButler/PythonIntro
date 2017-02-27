@@ -1,0 +1,15 @@
+from classFSM.FSM import FiniteStateMachine
+
+fsm = FiniteStateMachine()
+fsm.AddState('init')
+fsm.AddState('idle')
+fsm.AddState('exit')
+fsm.AddTransition('init', 'idle')
+fsm.AddTransition('idle', 'exit')
+fsm.StartMachine('init')
+print('CURRENT:' + str(fsm.currentstate))
+fsm.ChangeState('idle')
+print('CURRENT:' + str(fsm.currentstate))
+fsm.ChangeState('exit')
+print('CURRENT:' + str(fsm.currentstate))
+raw_input()
