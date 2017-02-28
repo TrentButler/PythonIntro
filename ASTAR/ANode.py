@@ -1,4 +1,6 @@
 class Node:
+	xPosition = 0
+	yPosition = 0
 	hEstimatedCost = 0
 	gMovementCost = 0
 	fCost = 0
@@ -11,4 +13,7 @@ class Node:
 		self.gMovementCost = G
 		self.fCost = F
 		self.wWalkable = Walkable
+	def SetPosition(self, X, Y):
+		self.xPosition = int(X)
+		self.yPosition = int(Y)
 	#updateNode function?
