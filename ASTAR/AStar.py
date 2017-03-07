@@ -6,6 +6,8 @@ class AStarApp:
 	currentNode = Node()
 	targetNode = Node()
 	grid = []
+	diagMovement = 14
+	regMovement = 10
 	nodeCount = 0
 	def __init__(self):
 		self.data = []
@@ -45,28 +47,28 @@ class AStarApp:
 		
 		for x in range(0, len(self.grid)):
 			if self.grid[x].compareTo(diagUpLeft) == True:
-				self.grid[x].UpdateNode(14,0)
+				self.grid[x].UpdateNode(self.diagMovement,0)
 				adjacentList.append(self.grid[x])
 			if self.grid[x].compareTo(diagUpRight) == True:
-				self.grid[x].UpdateNode(14,0)
+				self.grid[x].UpdateNode(self.diagMovement,0)
 				adjacentList.append(self.grid[x])
 			if self.grid[x].compareTo(diagDwnLeft) == True:
-				self.grid[x].UpdateNode(14,0)
+				self.grid[x].UpdateNode(self.diagMovement,0)
 				adjacentList.append(self.grid[x])
 			if self.grid[x].compareTo(diagDwnRight) == True:
-				self.grid[x].UpdateNode(14,0)
+				self.grid[x].UpdateNode(self.diagMovement,0)
 				adjacentList.append(self.grid[x])
 			if self.grid[x].compareTo(adjacentUp) == True:
-				self.grid[x].UpdateNode(10,0)
+				self.grid[x].UpdateNode(self.regMovement,0)
 				adjacentList.append(self.grid[x])
 			if self.grid[x].compareTo(adjacentDown) == True:
-				self.grid[x].UpdateNode(10,0)
+				self.grid[x].UpdateNode(self.regMovement,0)
 				adjacentList.append(self.grid[x])
 			if self.grid[x].compareTo(adjacentLeft) == True:
-				self.grid[x].UpdateNode(10,0)
+				self.grid[x].UpdateNode(self.regMovement,0)
 				adjacentList.append(self.grid[x])
 			if self.grid[x].compareTo(adjacentRight) == True:
-				self.grid[x].UpdateNode(10,0)
+				self.grid[x].UpdateNode(self.regMovement,0)
 				adjacentList.append(self.grid[x])
 		return adjacentList
 	#def Update():

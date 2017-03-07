@@ -40,4 +40,6 @@ class Node:
 	def UpdateNode(self, G, H):
 		self.gMovementCost = G
 		self.hEstimatedCost = H
+	def DebugNode(self):
+		return str(self) + self.GetPosition() + " WALKABLE(" + str(self.wWalkable) + ") " + "PARENT" + "self.nParent0.GetPosition()" + "H(" + str(self.hEstimatedCost) + ") " + "G(" + str(self.gMovementCost) + ") " + "F(" + str(self.fCost) + ")"  
 	#updateNode function?

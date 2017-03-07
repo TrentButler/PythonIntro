@@ -9,7 +9,7 @@ runAstar.grid[2].SetWalkable(False)
 runAstar.grid[10].SetWalkable(False)
 runAstar.Start
 for x in range(0, len(runAstar.grid)):
-	print (str(runAstar.grid[x].wWalkable) + " " + "POSITION: " + runAstar.grid[x].GetPosition())
+	print (runAstar.grid[x].DebugNode())
 print ("NODECOUNT: " + str(runAstar.nodeCount))
 print ("CURRENTNODE" + str(runAstar.currentNode.GetPosition()))
 print ("TARGET" + runAstar.targetNode.GetPosition())
