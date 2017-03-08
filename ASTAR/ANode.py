@@ -1,6 +1,7 @@
 class Node:
 	xPosition = 0
 	yPosition = 0
+	nodeID = 0
 	nParent = []
 	hEstimatedCost = 0
 	gMovementCost = 0
@@ -13,7 +14,7 @@ class Node:
 		self.hEstimatedCost = H
 		self.gMovementCost = G
 		self.fCost = F
-		self.wWalkable = Walkable
+		self.wWalkable = Walkable		
 	def SetPosition(self, X, Y):
 		self.xPosition = int(X)
 		self.yPosition = int(Y)
@@ -41,5 +42,5 @@ class Node:
 		self.gMovementCost = G
 		self.hEstimatedCost = H
 	def DebugNode(self):
-		return str(self) + self.GetPosition() + " WALKABLE(" + str(self.wWalkable) + ") " + "PARENT" + "self.nParent0.GetPosition()" + "H(" + str(self.hEstimatedCost) + ") " + "G(" + str(self.gMovementCost) + ") " + "F(" + str(self.fCost) + ")"  
+		return "POSITION" + self.GetPosition() + " WALKABLE(" + str(self.wWalkable) + ") " + "H(" + str(self.hEstimatedCost) + ") " + "G(" + str(self.gMovementCost) + ") " + "F(" + str(self.fCost) + ")"  
 	#updateNode function?
