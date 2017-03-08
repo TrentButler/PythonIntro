@@ -1,5 +1,5 @@
 from ASTAR.AStar import AStarApp
-from ASTAR.ANode import ANode
+from ASTAR.ANode import Node
 
 runAstar = AStarApp()
 runAstar.InitGrid(4,4)
