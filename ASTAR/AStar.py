@@ -14,6 +14,7 @@ class AStarApp:
     currentNode = Node()
     targetNode = Node()
     astarGrid = None
+    circleList = []
 
     def __init__(self):
         self.engine.init()
@@ -22,15 +23,15 @@ class AStarApp:
     def AddGrid(self, appGrid):
         self.astarGrid = appGrid
 
-    def SetStartNode(self, xPos, yPos):
-        for x in range(0, len(self.astarGrid.grid)):
-            if self.astarGrid.grid[x].CompareTo(xPos, yPos) is True:
-                self.currentNode = self.astarGrid.grid[x]
+    def SetStartNode(self, ID):
+        for node in self.astarGrid.grid:
+            if node.nodeID == ID:
+                self.currentNode = node
 
-    def SetTargetNode(self, xPos, yPos):
-        for x in range(0, len(self.astarGrid.grid)):
-            if self.astarGrid.grid[x].CompareTo(xPos, yPos) is True:
-                self.targetNode = self.astarGrid.grid[x]
+    def SetTargetNode(self, ID):
+        for node in self.astarGrid.grid:
+            if node.nodeID == ID:
+                self.targetNode = node
 
     def DrawGrid(self):
         rowCount = m.sqrt(len(self.astarGrid.grid))
@@ -48,8 +49,9 @@ class AStarApp:
         y = yStart
 
         for node in self.astarGrid.grid:
-            self.engine.draw.circle(
-                self.screen, (255, 255, 255), (x, y), circleSize)
+            node.SetPosition(x, y)
+            self.circleList.append(self.engine.draw.circle(
+                self.screen, (255, 255, 255), (x, y), circleSize))
             x += pixelDistance
             if x == xEnd:
                 x = xStart
@@ -75,6 +77,10 @@ class AStarApp:
 
             # self.engine.draw.line(self.screen, 100, 200)
             self.DrawGrid()
+            for node in self.astarGrid.grid:
+                if self.currentNode == node:
+                    node.print_info()
+
             self.engine.display.flip()
             # for node in astarGrid.grid:
 
