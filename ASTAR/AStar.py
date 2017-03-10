@@ -50,8 +50,8 @@ class AStarApp:
 
         for node in self.astarGrid.grid:
             node.SetPosition(x, y)
-            self.circleList.append(self.engine.draw.circle(
-                self.screen, (255, 255, 255), (x, y), circleSize))
+            self.engine.draw.circle(
+                self.screen, (255, 255, 255), (x, y), circleSize)
             x += pixelDistance
             if x == xEnd:
                 x = xStart

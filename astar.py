@@ -23,7 +23,7 @@ from ASTAR.AGrid import Grid
 
 
 runAstar = AStarApp()
-grid = Grid(10, 10)
+grid = Grid(10,10)
 runAstar.AddGrid(grid)
 runAstar.SetStartNode(6)
 runAstar.SetTargetNode(88)
