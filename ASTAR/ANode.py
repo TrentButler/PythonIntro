@@ -12,7 +12,7 @@ class Node:
         self.wWalkable = walkable
 
     def GetPosition(self):
-        return "(" + str(self.xPosition) + "," + str(self.yPosition) + ")"
+        return (self.xPosition, self.yPosition)
 
     def SetParent(self, parentNode):
         self.parent = parentNode
@@ -26,8 +26,7 @@ class Node:
         return False
 
     def compareTo(self, positionKey):
-        selfPosition = "(" + str(self.xPosition) + \
-            "," + str(self.yPosition) + ")"
+        selfPosition = (self.xPosition, self.yPosition)
         if selfPosition == positionKey:
             if self.wWalkable is True:
                 return True
@@ -41,4 +40,4 @@ class Node:
         print "POS" + self.GetPosition() + " WALKABLE(" + str(self.wWalkable)
 
     def print_info(self):
-        print "Node: " + str(self.nodeID) + " " + self.GetPosition()
+        print "Node: " + str(self.nodeID) + " " + str(self.GetPosition())

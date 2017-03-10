@@ -25,7 +25,7 @@ from ASTAR.AGrid import Grid
 runAstar = AStarApp()
 grid = Grid(10,10)
 runAstar.AddGrid(grid)
-runAstar.SetStartNode(6)
+runAstar.SetStartNode(1)
 runAstar.SetTargetNode(88)
 # runAstar.astarGrid.grid[2].SetWalkable(False)
 # runAstar.astarGrid.grid[10].SetWalkable(False)

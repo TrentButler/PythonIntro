@@ -13,8 +13,7 @@ class AStarApp:
     closedList = []
     currentNode = Node()
     targetNode = Node()
-    astarGrid = None
-    circleList = []
+    astarGrid = None    
 
     def __init__(self):
         self.engine.init()
@@ -36,13 +35,13 @@ class AStarApp:
     def DrawGrid(self):
         rowCount = m.sqrt(len(self.astarGrid.grid))
 
-        circleSize = 20
-        pixelDistance = 40
+        self.circleSize = 20
+        self.pixelDistance = 40
 
         xStart = self.xBoundary / 4
         yStart = (self.yBoundary / 2) + len(self.astarGrid.grid)
 
-        xEnd = xStart + (pixelDistance * rowCount)
+        xEnd = xStart + (self.pixelDistance * rowCount)
         # calculate end of x row
 
         x = xStart
@@ -51,11 +50,11 @@ class AStarApp:
         for node in self.astarGrid.grid:
             node.SetPosition(x, y)
             self.engine.draw.circle(
-                self.screen, (255, 255, 255), (x, y), circleSize)
-            x += pixelDistance
+                self.screen, (255, 255, 255), (x, y), self.circleSize)
+            x += self.pixelDistance
             if x == xEnd:
                 x = xStart
-                y -= pixelDistance
+                y -= self.pixelDistance
 
     def Start(self, xBound, yBound):
         # init display
@@ -69,6 +68,11 @@ class AStarApp:
         print "START"
 
     def Run(self):
+        BLK = (  0,   0,   0)
+        WHT = (255, 255, 255)
+        BLU = (  0,   0, 255)
+        GRE = (  0, 255,   0)
+        RED = (255,   0,   0)
         finished = False
         while not finished:
             for event in self.engine.event.get():
@@ -77,13 +81,15 @@ class AStarApp:
 
             # self.engine.draw.line(self.screen, 100, 200)
             self.DrawGrid()
-            for node in self.astarGrid.grid:
-                if self.currentNode == node:
-                    node.print_info()
-
+            self.engine.draw.circle(self.screen, GRE, (self.currentNode.GetPosition()), self.circleSize) # currentNode
+            self.engine.draw.circle(self.screen, RED, (self.targetNode.GetPosition()), self.circleSize) # targetNode
+            for node in self.astarGrid.GetAdjacentList(self.currentNode.nodeID, self.pixelDistance): # adjacents
+                self.engine.draw.circle(self.screen, BLU, (node.GetPosition()), self.circleSize)
+                # node.print_info()
+            
             self.engine.display.flip()
-            # for node in astarGrid.grid:
-
+        for node in self.astarGrid.GetAdjacentList(self.currentNode.nodeID, self.pixelDistance):
+            node.print_info()
         self.engine.quit()
     # make a update app function
     # work on class name

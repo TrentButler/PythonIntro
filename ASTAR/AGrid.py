@@ -29,27 +29,23 @@ class Grid(object):
 
     def GetBounds(self):
         return (xLimit, yLimit)
+    def GetNode(self, ID):
+        for node in self.grid:
+            if node.nodeID == ID:
+                return node
+    def GetAdjacentList(self, ID, distance):
+        adjacentList = []        
+        node = self.GetNode(ID)
 
-    def GetAdjacentList(self, ID):
-        adjacentList = []
-
-        diagUpLeft = "(" + str(self.grid[ID].xPosition - 1) + \
-            "," + str(self.grid[ID].yPosition + 1) + ")"
-        diagUpRight = "(" + str(self.grid[ID].xPosition + 1) + \
-            "," + str(self.grid[ID].yPosition + 1) + ")"
-        diagDwnLeft = "(" + str(self.grid[ID].xPosition - 1) + \
-            "," + str(self.grid[ID].yPosition - 1) + ")"
-        diagDwnRight = "(" + str(self.grid[ID].xPosition + 1) + \
-            "," + str(self.grid[ID].yPosition - 1) + ")"
-        adjacentUp = "(" + str(self.grid[ID].xPosition) + \
-            "," + str(self.grid[ID].yPosition + 1) + ")"
-        adjacentDown = "(" + str(self.grid[ID].xPosition) + \
-            "," + str(self.grid[ID].yPosition - 1) + ")"
-        adjacentLeft = "(" + str(self.grid[ID].xPosition - 1) + \
-            "," + str(self.grid[ID].yPosition) + ")"
-        adjacentRight = "(" + str(self.grid[ID].xPosition + 1) + \
-            "," + str(self.grid[ID].yPosition) + ")"
-
+        diagUpLeft = ((node.xPosition - distance), (node.yPosition - distance))
+        diagUpRight = ((node.xPosition + distance), (node.yPosition - distance))
+        diagDwnLeft = ((node.xPosition - distance), (node.yPosition + distance))
+        diagDwnRight = ((node.xPosition + distance), (node.yPosition + distance))
+        adjacentUp = ((node.xPosition), (node.yPosition - distance))
+        adjacentDown = ((node.xPosition), (node.yPosition + distance))
+        adjacentLeft = ((node.xPosition - distance), (node.yPosition))
+        adjacentRight = ((node.xPosition + distance), (node.yPosition))
+        
         for x in self.grid:
             if x.compareTo(diagUpLeft) is True:
                 x.UpdateNode(self.diagMovement, 0)
