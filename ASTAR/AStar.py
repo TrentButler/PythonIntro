@@ -68,11 +68,11 @@ class AStarApp:
         print "START"
 
     def Run(self):
-        BLK = (  0,   0,   0)
-        WHT = (255, 255, 255)
-        BLU = (  0,   0, 255)
-        GRE = (  0, 255,   0)
-        RED = (255,   0,   0)
+        BLK = (0, 0, 0)
+        BRN = (139 ,69 ,19)
+        BLU = (0, 0, 255)
+        GRE = (0, 255, 0)
+        RED = (255, 0, 0)
         finished = False
         while not finished:
             for event in self.engine.event.get():
@@ -86,10 +86,13 @@ class AStarApp:
             for node in self.astarGrid.GetAdjacentList(self.currentNode.nodeID, self.pixelDistance): # adjacents
                 self.engine.draw.circle(self.screen, BLU, (node.GetPosition()), self.circleSize)
                 # node.print_info()
-            
+            for node in self.astarGrid.grid:
+                if node.walkable is False:
+                    self.engine.draw.circle(self.screen, BRN, (node.GetPosition()), self.circleSize)
             self.engine.display.flip()
         for node in self.astarGrid.GetAdjacentList(self.currentNode.nodeID, self.pixelDistance):
             node.print_info()
         self.engine.quit()
     # make a update app function
     # work on class name
+    # make a updateAlgorithum function

@@ -1,15 +1,15 @@
 class Node:
     def __init__(self):
         self.data = []
-        self.wWalkable = True
+        self.walkable = True
         self.nodeID = None
 
     def SetPosition(self, X, Y):
         self.xPosition = int(X)
         self.yPosition = int(Y)
 
-    def SetWalkable(self, walkable):
-        self.wWalkable = walkable
+    def SetWalkable(self, Walkable):
+        self.walkable = Walkable
 
     def GetPosition(self):
         return (self.xPosition, self.yPosition)
@@ -21,14 +21,14 @@ class Node:
         selfPosition = str(self.xPosition) + "," + str(self.yPosition)
         comparePosition = str(X) + "," + str(Y)
         if selfPosition == comparePosition:
-            if self.wWalkable is True:
+            if self.walkable is True:
                 return True
         return False
 
     def compareTo(self, positionKey):
         selfPosition = (self.xPosition, self.yPosition)
         if selfPosition == positionKey:
-            if self.wWalkable is True:
+            if self.walkable is True:
                 return True
         return False
 
