@@ -32,63 +32,75 @@ class AStarApp:
             if node.nodeID == ID:
                 self.targetNode = node
 
-    def DrawGrid(self):
-        rowCount = m.sqrt(len(self.astarGrid.grid))
+    def DrawGrid(self):        
 
-        self.circleSize = 20
-        self.pixelDistance = 40
+        self.circleSize = int(self.offset/2)
+        self.pixelDistance = self.offset        
 
-        xStart = self.xBoundary / 4
-        yStart = (self.yBoundary / 2) + len(self.astarGrid.grid)
+        xAspect = self.rows * (self.pixelDistance + self.circleSize)
+        yAspect = self.rows * (self.pixelDistance + self.circleSize)
 
-        xEnd = xStart + (self.pixelDistance * rowCount)
+        xStart = self.offset
+        yStart = self.yBoundary - self.offset
+
+        # xStart = int(self.xBoundary - (self.rows * self.circleSize + self.pixelDistance))
+        # yStart = int(self.yBoundary - (self.rows * self.circleSize + self.pixelDistance))
+
+        xEnd = xStart + (self.pixelDistance * self.rows)
         # calculate end of x row
 
-        x = xStart
-        y = yStart
+        x = int(xStart)
+        y = int(yStart)
 
         for node in self.astarGrid.grid:
             node.SetPosition(x, y)
             self.engine.draw.circle(
-                self.screen, (255, 255, 255), (x, y), self.circleSize)
+                self.screen, (255, 255, 255), (int(x), int(y)), self.circleSize)
             x += self.pixelDistance
             if x == xEnd:
                 x = xStart
                 y -= self.pixelDistance
 
-    def Start(self, xBound, yBound):
+    def UpdateGrid(self): 
+        BLK = (0, 0, 0)
+        BRN = (139 ,69 ,19)
+        BLU = (0, 0, 255)
+        GRE = (0, 255, 0)
+        RED = (255, 0, 0)       
+        for node in self.astarGrid.GetAdjacentList(self.currentNode.nodeID, self.pixelDistance): # adjacents
+            self.engine.draw.circle(self.screen, BLU, (node.GetPosition()), self.circleSize)
+                # node.print_info()
+        for node in self.astarGrid.grid:  # walkable
+            if node.walkable is False:
+                self.engine.draw.circle(self.screen, BRN, (node.GetPosition()), self.circleSize)
+        self.engine.draw.circle(self.screen, GRE, (self.currentNode.GetPosition()), self.circleSize) # currentNode
+        self.engine.draw.circle(self.screen, RED, (self.targetNode.GetPosition()), self.circleSize) # targetNode
+
+    def Start(self):
         # init display
+        self.rows = self.astarGrid.GetBounds()[1]
+        self.offset = 40        
+
+        self.xBoundary = (self.rows * self.offset) + self.offset
+        self.yBoundary = (self.rows * self.offset) + self.offset
+
         self.engine.display.init()
-        self.xBoundary = xBound
-        self.yBoundary = yBound
-        self.screen = self.engine.display.set_mode((xBound, yBound))
+        self.screen = self.engine.display.set_mode((int(self.xBoundary), int(self.yBoundary)))
         self.engine.display.set_caption('Astar Project')
         # self.engine.display.flip()
         self.openList.append(self.currentNode)
         print "START"
 
-    def Run(self):
-        BLK = (0, 0, 0)
-        BRN = (139 ,69 ,19)
-        BLU = (0, 0, 255)
-        GRE = (0, 255, 0)
-        RED = (255, 0, 0)
+    def Run(self):       
         finished = False
-        while not finished:
-            for event in self.engine.event.get():
+        while not finished:           
+            for event in self.engine.event.get():               
                 if event.type == self.engine.QUIT:
                     finished = True
-
-            # self.engine.draw.line(self.screen, 100, 200)
+                   
             self.DrawGrid()
-            self.engine.draw.circle(self.screen, GRE, (self.currentNode.GetPosition()), self.circleSize) # currentNode
-            self.engine.draw.circle(self.screen, RED, (self.targetNode.GetPosition()), self.circleSize) # targetNode
-            for node in self.astarGrid.GetAdjacentList(self.currentNode.nodeID, self.pixelDistance): # adjacents
-                self.engine.draw.circle(self.screen, BLU, (node.GetPosition()), self.circleSize)
-                # node.print_info()
-            for node in self.astarGrid.grid:
-                if node.walkable is False:
-                    self.engine.draw.circle(self.screen, BRN, (node.GetPosition()), self.circleSize)
+            self.UpdateGrid() 
+            # self.engine.draw.circle(self.screen, (255, 255, 255), (int(self.xBoundary / 2), int(self.yBoundary / 2)), self.offset)           
             self.engine.display.flip()
         for node in self.astarGrid.GetAdjacentList(self.currentNode.nodeID, self.pixelDistance):
             node.print_info()

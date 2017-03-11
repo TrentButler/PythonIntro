@@ -28,7 +28,7 @@ class Grid(object):
                 self.yIncrementor += 1
 
     def GetBounds(self):
-        return (xLimit, yLimit)
+        return (self.xLimit, self.yLimit)
     def GetNode(self, ID):
         for node in self.grid:
             if node.nodeID == ID:
