@@ -32,30 +32,19 @@ class AStarApp:
             if node.nodeID == ID:
                 self.targetNode = node
 
-    def DrawGrid(self):        
-
+    def DrawGrid(self):
         self.circleSize = int(self.offset/2)
-        self.pixelDistance = self.offset        
-
-        xAspect = self.rows * (self.pixelDistance + self.circleSize)
-        yAspect = self.rows * (self.pixelDistance + self.circleSize)
-
+        self.pixelDistance = self.offset
         xStart = self.offset
         yStart = self.yBoundary - self.offset
-
-        # xStart = int(self.xBoundary - (self.rows * self.circleSize + self.pixelDistance))
-        # yStart = int(self.yBoundary - (self.rows * self.circleSize + self.pixelDistance))
-
-        xEnd = xStart + (self.pixelDistance * self.rows)
+        xEnd = xStart + (self.pixelDistance * self.cols)
         # calculate end of x row
-
         x = int(xStart)
         y = int(yStart)
-
         for node in self.astarGrid.grid:
             node.SetPosition(x, y)
             self.engine.draw.circle(
-                self.screen, (255, 255, 255), (int(x), int(y)), self.circleSize)
+                self.screen, (255, 255, 255), (x, y), self.circleSize)
             x += self.pixelDistance
             if x == xEnd:
                 x = xStart
@@ -79,9 +68,10 @@ class AStarApp:
     def Start(self):
         # init display
         self.rows = self.astarGrid.GetBounds()[1]
+        self.cols = self.astarGrid.GetBounds()[0]
         self.offset = 40        
 
-        self.xBoundary = (self.rows * self.offset) + self.offset
+        self.xBoundary = (self.cols * self.offset) + self.offset
         self.yBoundary = (self.rows * self.offset) + self.offset
 
         self.engine.display.init()
@@ -97,10 +87,9 @@ class AStarApp:
             for event in self.engine.event.get():               
                 if event.type == self.engine.QUIT:
                     finished = True
-                   
+                # if event.type == (mouseclick in range of a node)
             self.DrawGrid()
-            self.UpdateGrid() 
-            # self.engine.draw.circle(self.screen, (255, 255, 255), (int(self.xBoundary / 2), int(self.yBoundary / 2)), self.offset)           
+            self.UpdateGrid()                       
             self.engine.display.flip()
         for node in self.astarGrid.GetAdjacentList(self.currentNode.nodeID, self.pixelDistance):
             node.print_info()
