@@ -3,6 +3,9 @@ class Node:
         self.data = []
         self.walkable = True
         self.nodeID = None
+        self.gCost = 0
+        self.hCost = 0
+        self.fCost = 0
 
     def SetPosition(self, X, Y):
         self.xPosition = int(X)
@@ -13,6 +16,11 @@ class Node:
 
     def GetPosition(self):
         return (self.xPosition, self.yPosition)
+
+    def GetDistance(self, node):
+        xDist = self.xPosition - node.GetPosition()[0]
+        yDist = node.GetPosition()[1] - self.yPosition
+        return abs(xDist + yDist)
 
     def SetParent(self, parentNode):
         self.parent = parentNode
@@ -35,6 +43,7 @@ class Node:
     def UpdateNode(self, G, H):
         self.gCost = G
         self.hCost = H
+        self.fCost = self.gCost + self.hCost
 
     def DebugNode(self):
         print "POS" + self.GetPosition() + " WALKABLE(" + str(self.wWalkable)

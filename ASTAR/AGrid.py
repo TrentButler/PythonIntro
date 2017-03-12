@@ -33,7 +33,7 @@ class Grid(object):
         for node in self.grid:
             if node.nodeID == ID:
                 return node
-    def GetAdjacentList(self, ID, distance):
+    def GetAdjacentList(self, ID, distance, target):
         adjacentList = []        
         node = self.GetNode(ID)
 
@@ -48,75 +48,69 @@ class Grid(object):
         
         for x in self.grid:
             if x.compareTo(diagUpLeft) is True:
-                x.UpdateNode(self.diagMovement, 0)
+                x.UpdateNode(self.diagMovement, x.GetDistance(target))
                 adjacentList.append(x)
             if x.compareTo(diagUpRight) is True:
-                x.UpdateNode(self.diagMovement, 0)
+                x.UpdateNode(self.diagMovement, x.GetDistance(target))
                 adjacentList.append(x)
             if x.compareTo(diagDwnLeft) is True:
-                x.UpdateNode(self.diagMovement, 0)
+                x.UpdateNode(self.diagMovement, x.GetDistance(target))
                 adjacentList.append(x)
             if x.compareTo(diagDwnRight) is True:
-                x.UpdateNode(self.diagMovement, 0)
+                x.UpdateNode(self.diagMovement, x.GetDistance(target))
                 adjacentList.append(x)
             if x.compareTo(adjacentUp) is True:
-                x.UpdateNode(self.regMovement, 0)
+                x.UpdateNode(self.regMovement, x.GetDistance(target))
                 adjacentList.append(x)
             if x.compareTo(adjacentDown) is True:
-                x.UpdateNode(self.regMovement, 0)
+                x.UpdateNode(self.regMovement, x.GetDistance(target))
                 adjacentList.append(x)
             if x.compareTo(adjacentLeft) is True:
-                x.UpdateNode(self.regMovement, 0)
+                x.UpdateNode(self.regMovement, x.GetDistance(target))
                 adjacentList.append(x)
             if x.compareTo(adjacentRight) is True:
-                x.UpdateNode(self.regMovement, 0)
+                x.UpdateNode(self.regMovement, x.GetDistance(target))
                 adjacentList.append(x)
         return adjacentList
 
-    def GetAdjacentDictionary(self, ID):
+    def GetAdjacentDictionary(self, ID, distance, target):
         adjacentDictionary = {}
 
-        diagUpLeft = "(" + str(self.grid[ID].xPosition - 1) + \
-            "," + str(self.grid[ID].yPosition + 1) + ")"
-        diagUpRight = "(" + str(self.grid[ID].xPosition + 1) + \
-            "," + str(self.grid[ID].yPosition + 1) + ")"
-        diagDwnLeft = "(" + str(self.grid[ID].xPosition - 1) + \
-            "," + str(self.grid[ID].yPosition - 1) + ")"
-        diagDwnRight = "(" + str(self.grid[ID].xPosition + 1) + \
-            "," + str(self.grid[ID].yPosition - 1) + ")"
-        adjacentUp = "(" + str(self.grid[ID].xPosition) + \
-            "," + str(self.grid[ID].yPosition + 1) + ")"
-        adjacentDown = "(" + str(self.grid[ID].xPosition) + \
-            "," + str(self.grid[ID].yPosition - 1) + ")"
-        adjacentLeft = "(" + str(self.grid[ID].xPosition - 1) + \
-            "," + str(self.grid[ID].yPosition) + ")"
-        adjacentRight = "(" + str(self.grid[ID].xPosition + 1) + \
-            "," + str(self.grid[ID].yPosition) + ")"
+        node = self.GetNode(ID)
+
+        diagUpLeft = ((node.xPosition - distance), (node.yPosition - distance))
+        diagUpRight = ((node.xPosition + distance), (node.yPosition - distance))
+        diagDwnLeft = ((node.xPosition - distance), (node.yPosition + distance))
+        diagDwnRight = ((node.xPosition + distance), (node.yPosition + distance))
+        adjacentUp = ((node.xPosition), (node.yPosition - distance))
+        adjacentDown = ((node.xPosition), (node.yPosition + distance))
+        adjacentLeft = ((node.xPosition - distance), (node.yPosition))
+        adjacentRight = ((node.xPosition + distance), (node.yPosition))
 
         for x in self.grid:
             if x.compareTo(diagUpLeft) is True:
-                x.UpdateNode(self.diagMovement, 0)
+                x.UpdateNode(self.diagMovement, x.GetDistance(target))
                 adjacentDictionary["DIAGUPLEFT"] = x
             if x.compareTo(diagUpRight) is True:
-                x.UpdateNode(self.diagMovement, 0)
+                x.UpdateNode(self.diagMovement, x.GetDistance(target))
                 adjacentDictionary["DIAGUPRIGHT"] = x
             if x.compareTo(diagDwnLeft) is True:
-                x.UpdateNode(self.diagMovement, 0)
+                x.UpdateNode(self.diagMovement, x.GetDistance(target))
                 adjacentDictionary["DIAGDWNLEFT"] = x
             if x.compareTo(diagDwnRight) is True:
-                x.UpdateNode(self.diagMovement, 0)
+                x.UpdateNode(self.diagMovement, x.GetDistance(target))
                 adjacentDictionary["DIAGDWNRIGHT"] = x
             if x.compareTo(adjacentUp) is True:
-                x.UpdateNode(self.regMovement, 0)
+                x.UpdateNode(self.regMovement, x.GetDistance(target))
                 adjacentDictionary["UP"] = x
             if x.compareTo(adjacentDown) is True:
-                x.UpdateNode(self.regMovement, 0)
+                x.UpdateNode(self.regMovement, x.GetDistance(target))
                 adjacentDictionary["DOWN"] = x
             if x.compareTo(adjacentLeft) is True:
-                x.UpdateNode(self.regMovement, 0)
+                x.UpdateNode(self.regMovement, x.GetDistance(target))
                 adjacentDictionary["LEFT"] = x
             if x.compareTo(adjacentRight) is True:
-                x.UpdateNode(self.regMovement, 0)
+                x.UpdateNode(self.regMovement, x.GetDistance(target))
                 adjacentDictionary["RIGHT"] = x
 
         return adjacentDictionary
