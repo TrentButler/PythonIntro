@@ -17,6 +17,7 @@ class AStarApp:
         self.currentNode = Node()
         self.targetNode = Node()
         self.startNode = Node()
+        self.blockerNode = Node()
         self.astarGrid = None 
         self.engine.init()
         self.data = []
@@ -85,7 +86,10 @@ class AStarApp:
         BLU = (0, 0, 255)
         GRE = (0, 255, 0)
         RED = (255, 0, 0)
-        YEL = (255, 255, 0)  
+        YEL = (255, 255, 0)
+        PNK = (255, 0, 255)
+        
+        self.engine.draw.circle(self.screen, PNK, (self.blockerNode.GetPosition()), self.circleSize, 2) # blockerNode
         for node in self.astarGrid.GetAdjacentList(self.currentNode.nodeID, self.offset, self.targetNode): # adjacents
             self.engine.draw.circle(self.screen, BLU, (node.GetPosition()), self.circleSize)
                 # node.print_info()
@@ -99,7 +103,25 @@ class AStarApp:
         self.engine.draw.circle(self.screen, RED, (self.targetNode.GetPosition()), self.circleSize) # targetNode
         for node in self.closedList:  # path
             self.engine.draw.circle(self.screen, BLK, (node.GetPosition()), self.circleSize / 2)
+         
+    def ReStart(self, start, target):
+        self.engine = pyEngine
+        self.xBoundary = None
+        self.yBoundary = None
+        self.screen = None
+        self.openList = []
+        self.closedList = []
+        self.currentNode = Node()
+        self.targetNode = target
+        self.startNode = start
+        self.blockerNode = Node()
+        self.astarGrid = None 
+        self.engine.init()
+        self.data = []
+        self.run = True
 
+        self.Start()
+        self.Run()
 
     def Start(self):
         # init display
@@ -116,17 +138,57 @@ class AStarApp:
 
         if self.currentNode is not None:            
             self.openList.append(self.currentNode)        
+        
+        self.blockerNode.SetPosition(-(self.offset), -(self.offset))
+
         print "START"
 
     def Run(self):       
         finished = False
-        while not finished:                      
+        while not finished:
+           # self.blockerNode.SetPosition(self.engine.mouse.get_pos()[0], self.engine.mouse.get_pos()[1])
             for event in self.engine.event.get():               
                 if event.type == self.engine.QUIT:
                     finished = True
-                # if event.type == (mouseclick in range of a node)
+
+                if event.type == self.engine.MOUSEBUTTONDOWN:
+                    for node in self.astarGrid.grid:
+                        if node.GetPosition() == self.blockerNode.GetPosition():
+                            node.SetWalkable(False)
+
+                if event.type == self.engine.KEYDOWN:
+                    if self.engine.key.get_pressed()[self.engine.K_F8]:
+                        self.RunStarAlgorithum()
+
+                    if self.engine.key.get_pressed()[self.engine.K_F2]:                        
+                        self.blockerNode.SetPosition(self.astarGrid.grid[0].GetPosition()[0], self.astarGrid.grid[0].GetPosition()[1])
+                        
+                    if self.engine.key.get_pressed()[self.engine.K_UP]:
+                        self.blockerNode.yPosition -= (self.offset)
+                    
+                    if self.engine.key.get_pressed()[self.engine.K_DOWN]:
+                        self.blockerNode.yPosition += (self.offset)
+
+                    if self.engine.key.get_pressed()[self.engine.K_LEFT]:
+                        self.blockerNode.xPosition -= (self.offset)
+
+                    if self.engine.key.get_pressed()[self.engine.K_RIGHT]:
+                        self.blockerNode.xPosition += (self.offset)
+
+                    if self.engine.key.get_pressed()[self.engine.K_RETURN]:
+                        for node in self.astarGrid.grid:
+                            if node.GetPosition() == self.blockerNode.GetPosition():
+                                node.SetWalkable(False)
+
+                    # if self.engine.key.get_pressed()[self.engine.K_r]:
+                        # self.ReStart(self.startNode, self.targetNode)
+
+                    if self.engine.key.get_pressed()[self.engine.K_ESCAPE]:
+                        finished = True
+
+
             self.DrawGrid()
-            self.RunStarAlgorithum()
+            # self.RunStarAlgorithum()
             self.UpdateGrid()                       
             self.engine.display.flip()
         for node in self.astarGrid.GetAdjacentList(self.currentNode.nodeID, self.offset, self.targetNode):
