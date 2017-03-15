@@ -2,7 +2,7 @@ class Node:
     def __init__(self):
         self.data = []
         self.walkable = True
-        self.nodeID = None
+        self.nodeID = None        
         self.gCost = 0
         self.hCost = 0
         self.fCost = 0
@@ -33,9 +33,8 @@ class Node:
                 return True
         return False
 
-    def compareTo(self, positionKey):
-        selfPosition = (self.xPosition, self.yPosition)
-        if selfPosition == positionKey:
+    def compareTo(self, positionKey):        
+        if self.GetPosition() == positionKey:
             if self.walkable is True:
                 return True
         return False
