@@ -28,11 +28,11 @@ runAstar.AddGrid(grid)
 runAstar.SetStartNode(100)
 runAstar.SetTargetNode(1)
 
-runAstar.astarGrid.grid[1].SetWalkable(False)
-runAstar.astarGrid.grid[10].SetWalkable(False)
-for x in range(80,87):
-    runAstar.astarGrid.grid[x].SetWalkable(False)
-for x in range(77, 79):
-    runAstar.astarGrid.grid[x].SetWalkable(False)
+# runAstar.astarGrid.grid[1].SetWalkable(False)
+# runAstar.astarGrid.grid[10].SetWalkable(False)
+# for x in range(80,87):
+    # runAstar.astarGrid.grid[x].SetWalkable(False)
+# for x in range(77, 79):
+    # runAstar.astarGrid.grid[x].SetWalkable(False)
 runAstar.Start()
 runAstar.Run()

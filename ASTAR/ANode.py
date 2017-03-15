@@ -45,8 +45,8 @@ class Node:
         self.hCost = H
         self.fCost = self.gCost + self.hCost
 
-    def DebugNode(self):
-        print "POS" + self.GetPosition() + " WALKABLE(" + str(self.wWalkable)
+    def print_parent(self):
+        return self.parent.print_info()
 
     def print_info(self):
         print "Node: " + str(self.nodeID) + " " + str(self.GetPosition())

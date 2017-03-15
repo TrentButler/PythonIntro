@@ -25,6 +25,7 @@ class AStarApp:
 
     def AddGrid(self, appGrid):
         self.astarGrid = appGrid
+        self.saveGrid = appGrid
 
     def SetStartNode(self, ID):
         for node in self.astarGrid.grid:
@@ -39,27 +40,31 @@ class AStarApp:
 
     def RunStarAlgorithum(self):
         if self.run:
-            self.currentNode.UpdateNode(0, self.currentNode.GetDistance(self.targetNode))
+            
             while self.currentNode is not self.targetNode:
+                self.currentNode.UpdateNode(self.currentNode.gCost, self.currentNode.GetDistance(self.targetNode))
                 if self.currentNode not in self.closedList:
                     self.closedList.append(self.currentNode)
-                self.openList.sort(key=lambda x: x.fCost)
-                self.currentNode = self.openList[0]
-                if self.currentNode is self.targetNode:
-                    self.closedList.append(self.currentNode)
-                    self.run = False
-                    # make returnPath function
+
                 adjList = self.astarGrid.GetAdjacentList(self.currentNode.nodeID, self.offset, self.targetNode)
                 for node in adjList:
                     if node in self.closedList:
                         continue
                     tgCost = self.currentNode.gCost + node.GetDistance(self.currentNode)
-                    if node not in self.openList:
+                    if node not in self.openList and node.walkable is True:
                         self.openList.append(node)
                     if tgCost >= node.gCost:
                         continue
                     node.SetParent(self.currentNode)
-                    node.UpdateNode(tgCost, node.GetDistance(self.targetNode))               
+                    node.UpdateNode(tgCost, node.GetDistance(self.targetNode)) 
+                self.openList.sort(key=lambda x: x.fCost)
+                self.currentNode = self.openList[0]
+                if self.currentNode is self.targetNode:
+                    self.closedList.append(self.currentNode)
+                    for node in self.closedList:
+                        node.print_parent()
+                    self.run = False
+                    # make returnPath function                                  
 
     def DrawGrid(self):
         AZU = (240, 255, 255)
@@ -102,7 +107,7 @@ class AStarApp:
         self.engine.draw.circle(self.screen, GRE, (self.startNode.GetPosition()), self.circleSize) # startNode
         self.engine.draw.circle(self.screen, RED, (self.targetNode.GetPosition()), self.circleSize) # targetNode
         for node in self.closedList:  # path
-            self.engine.draw.circle(self.screen, BLK, (node.GetPosition()), self.circleSize / 2)
+            self.engine.draw.circle(self.screen, BLK, (node.parent.GetPosition()), self.circleSize / 2)
          
     def ReStart(self, start, target):
         self.engine = pyEngine
@@ -115,7 +120,7 @@ class AStarApp:
         self.targetNode = target
         self.startNode = start
         self.blockerNode = Node()
-        self.astarGrid = None 
+        self.astarGrid = self.saveGrid 
         self.engine.init()
         self.data = []
         self.run = True
@@ -180,8 +185,27 @@ class AStarApp:
                             if node.GetPosition() == self.blockerNode.GetPosition():
                                 node.SetWalkable(False)
 
+                    if self.engine.key.get_pressed()[self.engine.K_SPACE]:
+                        for node in self.astarGrid.grid:
+                            if node.GetPosition() == self.blockerNode.GetPosition():
+                                node.SetWalkable(True)
+                                
+                    if self.engine.key.get_pressed()[self.engine.K_LSHIFT]:
+                        for node in self.astarGrid.grid:
+                            if node.GetPosition() == self.blockerNode.GetPosition():
+                                self.currentNode = node
+                                self.startNode = node
+                                self.openList = []
+                                self.openList.append(self.currentNode)
+                
+                    if self.engine.key.get_pressed()[self.engine.K_RSHIFT]:
+                        for node in self.astarGrid.grid:
+                            if node.GetPosition() == self.blockerNode.GetPosition():
+                                self.targetNode = node
+
                     # if self.engine.key.get_pressed()[self.engine.K_r]:
                         # self.ReStart(self.startNode, self.targetNode)
+                        # print "RESTART SUCCESSFUL"
 
                     if self.engine.key.get_pressed()[self.engine.K_ESCAPE]:
                         finished = True
