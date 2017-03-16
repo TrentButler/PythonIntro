@@ -21,9 +21,8 @@ from ASTAR.AGrid import Grid
 # for n in neighbors:
 # n.print_info()
 
-
 runAstar = AStarApp()
-grid = Grid(10, 10)
+grid = Grid(4, 4)
 runAstar.AddGrid(grid)
 runAstar.SetStartNode(1)
 runAstar.SetTargetNode(len(runAstar.astarGrid.grid))
@@ -34,5 +33,8 @@ runAstar.SetTargetNode(len(runAstar.astarGrid.grid))
     # runAstar.astarGrid.grid[x].SetWalkable(False)
 # for x in range(77, 79):
     # runAstar.astarGrid.grid[x].SetWalkable(False)
+
+
+
 runAstar.Start()
 runAstar.Run()

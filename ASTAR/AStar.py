@@ -39,19 +39,19 @@ class AStarApp:
             if node.nodeID == ID:
                 self.targetNode = node
 
-    def RunStarAlgorithum(self):
+    def RunStarAlgorithum(self):  # PARENTING NEEDS WORK
         self.currentNode.UpdateNode(self.currentNode.gCost, self.currentNode.GetDistance(self.targetNode))
-        self.currentNode.SetParent(self.currentNode)        
+        self.startNode.SetParent(self.currentNode)        
         
         while len(self.openList) is not 0:
             self.openList.sort(key=lambda x: x.fCost)  # SORT OPENLIST
             self.currentNode = self.openList[0]  # ASSIGN CURRENTNODE MOST OPTIMAL NODE IN OPENLIST                
             if self.currentNode is self.targetNode:  # CHECK IF CURRENTNODE IS TARGETNODE
                 self.closedList.append(self.targetNode)
-                for node in self.astarGrid.Retrace(self.closedList, self.targetNode):
-                    node.print_info()
+                # for node in self.astarGrid.Retrace(self.startNode, self.targetNode):
+                    # node.print_info()
                     # node.print_parent()
-                print "COUNT: " + str(len(self.astarGrid.Retrace(self.closedList, self.targetNode)))
+                # print "COUNT: " + str(len(self.astarGrid.Retrace(self.startNode, self.targetNode)))
                 self.algorithmDone = True                
                 break                   
                 # make returnPath function 
@@ -109,8 +109,6 @@ class AStarApp:
         RED = (255, 0, 0)
         YEL = (255, 255, 0)
         PNK = (255, 0, 255)
-        pointOne = 0
-        pointTwo = 1
         
         self.engine.draw.circle(self.screen, PNK, (self.blockerNode.GetPosition()), self.circleSize, 2) # blockerNode
 
@@ -128,12 +126,12 @@ class AStarApp:
         self.engine.draw.circle(self.screen, GRE, (self.startNode.GetPosition()), self.circleSize) # startNode
         self.engine.draw.circle(self.screen, RED, (self.targetNode.GetPosition()), self.circleSize) # targetNode
 
-        retracedList = self.astarGrid.Retrace(self.closedList, self.targetNode)        
-        if self.algorithmDone is True: 
-            for node in retracedList:  # path
-                # if pointTwo >= len(self.closedList):
-                    # pointTwo = len(self.closedList)      
-                self.engine.draw.circle(self.screen, PNK, node.GetPosition(), self.circleSize / 2)
+              
+        if self.algorithmDone is True:
+            retracedList = self.astarGrid.Retrace(self.startNode, self.targetNode) 
+            for node in retracedList:  # path                
+                self.engine.draw.line(self.screen, PNK, node.parent.GetPosition(), node.GetPosition(), self.circleSize / 2)
+                # self.engine.draw.circle(self.screen, PNK, node.GetPosition(), self.circleSize / 2)
             # pointOne += 1
             # pointTwo += 1
 
@@ -148,15 +146,30 @@ class AStarApp:
         self.blockerNode = Node()
         self.astarGrid = self.saveGrid        
         self.run = True
+        self.algorithmDone = False
 
         self.Start()
         self.Run()
+
+
+    def CollisionCheck(self):
+        if self.blockerNode.GetPosition()[0] >= self.xBoundary:
+            self.blockerNode.xPosition -= self.offset
+        
+        if self.blockerNode.GetPosition()[0] <= self.offset:
+                self.blockerNode.xPosition = self.offset
+        
+        if self.blockerNode.GetPosition()[1] <= self.offset:
+                self.blockerNode.yPosition = self.offset
+
+        if self.blockerNode.GetPosition()[1] >= self.yBoundary:
+                self.blockerNode.yPosition -= self.offset
 
     def Start(self):
         # init display
         self.rows = self.astarGrid.GetBounds()[1]
         self.cols = self.astarGrid.GetBounds()[0]
-        self.offset = 40        
+        self.offset = 80        
 
         self.xBoundary = (self.cols * self.offset) + self.offset
         self.yBoundary = (self.rows * self.offset) + self.offset
@@ -168,11 +181,13 @@ class AStarApp:
         if self.currentNode is not None:            
             self.openList.append(self.currentNode)        
         
-        self.blockerNode.SetPosition(-(self.offset), -(self.offset))
+        self.blockerNode.SetPosition(self.astarGrid.grid[0].GetPosition()[0], self.astarGrid.grid[0].GetPosition()[1])
 
         print "START"
 
-    def Run(self):       
+        
+
+    def Run(self):
         finished = False
         while not finished:
             # self.blockerNode.SetPosition(self.engine.mouse.get_pos()[0], self.engine.mouse.get_pos()[1])
@@ -187,22 +202,19 @@ class AStarApp:
 
                 if event.type == self.engine.KEYDOWN:
                     if self.engine.key.get_pressed()[self.engine.K_F8]:
-                        self.RunStarAlgorithum()
-
-                    if self.engine.key.get_pressed()[self.engine.K_F2]:                        
-                        self.blockerNode.SetPosition(self.astarGrid.grid[0].GetPosition()[0], self.astarGrid.grid[0].GetPosition()[1])
+                        self.RunStarAlgorithum()                    
                         
                     if self.engine.key.get_pressed()[self.engine.K_UP]:
-                        self.blockerNode.yPosition -= (self.offset)
+                        self.blockerNode.yPosition -= self.offset
                     
                     if self.engine.key.get_pressed()[self.engine.K_DOWN]:
-                        self.blockerNode.yPosition += (self.offset)
+                        self.blockerNode.yPosition += self.offset
 
                     if self.engine.key.get_pressed()[self.engine.K_LEFT]:
-                        self.blockerNode.xPosition -= (self.offset)
+                        self.blockerNode.xPosition -= self.offset
 
                     if self.engine.key.get_pressed()[self.engine.K_RIGHT]:
-                        self.blockerNode.xPosition += (self.offset)
+                        self.blockerNode.xPosition += self.offset
 
                     if self.engine.key.get_pressed()[self.engine.K_RETURN]:
                         for node in self.astarGrid.grid:
@@ -232,11 +244,11 @@ class AStarApp:
                         print "RESTART SUCCESSFUL"
 
                     if self.engine.key.get_pressed()[self.engine.K_ESCAPE]:
-                        finished = True
-
+                        finished = True             
 
             self.DrawGrid()
             # self.RunStarAlgorithum()
+            self.CollisionCheck()
             self.UpdateGrid()                       
             self.engine.display.flip()
         

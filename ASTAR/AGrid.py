@@ -10,8 +10,7 @@ class Grid(object):
         self.diagMovement = 14
         self.regMovement = 10
         self.xIncrementor = 0
-        self.yIncrementor = 0
-        self.nodeCount = 0
+        self.yIncrementor = 0        
         self.xLimit = xBounds
         self.yLimit = yBounds
         self.data = []
@@ -34,13 +33,27 @@ class Grid(object):
             if node.nodeID == ID:
                 return node
 
-    def Retrace(self, nodeList, endNode):
+    # def Retrace(self, nodeList):
+        # if len(nodeList) > 0:
+            # retraced = []
+            # incrementor = len(nodeList) - 1 
+            # running = True
+            # while running is True:
+                # if incrementor == 0:
+                    # running = False
+                    # break
+                # retraced.append(nodeList[incrementor])
+                # incrementor -= 1
+            # return retraced
+
+    def Retrace(self, start, end):
         retraced = []
-        currentNode = endNode
-        for node in nodeList:
+        currentNode = end         
+        while currentNode.nodeID is not start.nodeID:
             retraced.append(currentNode)
-            # currentNode = 
-            # NEEDS WORK
+            currentNode = currentNode.parent
+        return retraced
+            
         
 
     def GetAdjacentList(self, ID, distance, target):
