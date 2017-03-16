@@ -33,6 +33,16 @@ class Grid(object):
         for node in self.grid:
             if node.nodeID == ID:
                 return node
+
+    def Retrace(self, nodeList, endNode):
+        retraced = []
+        currentNode = endNode
+        for node in nodeList:
+            retraced.append(currentNode)
+            # currentNode = 
+            # NEEDS WORK
+        
+
     def GetAdjacentList(self, ID, distance, target):
         adjacentList = []        
         node = self.GetNode(ID)

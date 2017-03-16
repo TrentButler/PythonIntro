@@ -22,6 +22,7 @@ class AStarApp:
         self.engine.init()
         self.data = []
         self.run = True
+        self.algorithmDone = False
 
     def AddGrid(self, appGrid):
         self.astarGrid = appGrid
@@ -40,46 +41,46 @@ class AStarApp:
 
     def RunStarAlgorithum(self):
         self.currentNode.UpdateNode(self.currentNode.gCost, self.currentNode.GetDistance(self.targetNode))
-        self.currentNode.SetParent(self.startNode)
-        if self.run is True:
-            while len(self.openList) is not 0:
-                self.openList.sort(key=lambda x: x.fCost)  # SORT OPENLIST
-                self.currentNode = self.openList[0]  # ASSIGN CURRENTNODE MOST OPTIMAL NODE IN OPENLIST                
-                if self.currentNode is self.targetNode:  # CHECK IF CURRENTNODE IS TARGETNODE
-                    self.closedList.append(self.targetNode)
-                    for node in self.closedList:
-                        node.print_info()
-                        # node.print_parent()
-                    print "COUNT: " + str(len(self.closedList))
-                    self.run = False
-                    break                   
-                    # make returnPath function 
+        self.currentNode.SetParent(self.currentNode)        
+        
+        while len(self.openList) is not 0:
+            self.openList.sort(key=lambda x: x.fCost)  # SORT OPENLIST
+            self.currentNode = self.openList[0]  # ASSIGN CURRENTNODE MOST OPTIMAL NODE IN OPENLIST                
+            if self.currentNode is self.targetNode:  # CHECK IF CURRENTNODE IS TARGETNODE
+                self.closedList.append(self.targetNode)
+                for node in self.astarGrid.Retrace(self.closedList, self.targetNode):
+                    node.print_info()
+                    # node.print_parent()
+                print "COUNT: " + str(len(self.astarGrid.Retrace(self.closedList, self.targetNode)))
+                self.algorithmDone = True                
+                break                   
+                # make returnPath function 
+            
+            # if len(self.openList) > 1:  # REMOVE CURRENTNODE FROM OPENLIST
+            self.openList.remove(self.currentNode)
+            # if self.currentNode not in self.closedList:  # APPEND CURRENTNODE TO CLOSED LIST                    
+            self.closedList.append(self.currentNode)
+            adjList = self.astarGrid.GetAdjacentList(self.currentNode.nodeID, self.offset, self.targetNode)  # GET CURRENTNODE'S ADJACENTS
+            for node in adjList:  # CHECK ALL ADJACENT NODES FOR BEST PATH
+                if node in self.closedList:
+                    continue
                 
-                # if len(self.openList) > 1:  # REMOVE CURRENTNODE FROM OPENLIST
-                self.openList.remove(self.currentNode)
-                # if self.currentNode not in self.closedList:  # APPEND CURRENTNODE TO CLOSED LIST                    
-                self.closedList.append(self.currentNode)
-                adjList = self.astarGrid.GetAdjacentList(self.currentNode.nodeID, self.offset, self.targetNode)  # GET CURRENTNODE'S ADJACENTS
-                for node in adjList:  # CHECK ALL ADJACENT NODES FOR BEST PATH
-                    if node in self.closedList:
-                        continue
-                    
-                    if node not in self.openList and node.walkable is True:
-                        self.openList.append(node)
-                    
-                    # if node in self.openList:
-                        # if node.gCost > self.currentNode.gCost:
-                            # node.SetParent(self.currentNode)
-                            # node.UpdateNode(node.gCost, node.GetDistance(self.targetNode))
-                    
-                    tgCost = self.currentNode.gCost + node.gCost  # needs work
-                    if tgCost >= node.gCost:
-                        continue
-                    # node.SetParent(self.currentNode)
-                    # node.UpdateNode(tgCost, node.GetDistance(self.targetNode)) 
-                    node.gCost = tgCost
-                    node.hCost = node.GetDistance(self.targetNode)
-                    node.fCost = node.gCost + node.hCost
+                if node not in self.openList and node.walkable is True:
+                    self.openList.append(node)
+                
+                # if node in self.openList:
+                    # if node.gCost > self.currentNode.gCost:
+                        # node.SetParent(self.currentNode)
+                        # node.UpdateNode(node.gCost, node.GetDistance(self.targetNode))
+                
+                tgCost = self.currentNode.gCost + node.gCost  # needs work
+                if tgCost >= node.gCost:
+                    continue
+                # node.SetParent(self.currentNode)
+                # node.UpdateNode(tgCost, node.GetDistance(self.targetNode)) 
+                node.gCost = tgCost
+                node.hCost = node.GetDistance(self.targetNode)
+                node.fCost = node.gCost + node.hCost
 
     def DrawGrid(self):
         AZU = (240, 255, 255)
@@ -127,13 +128,14 @@ class AStarApp:
         self.engine.draw.circle(self.screen, GRE, (self.startNode.GetPosition()), self.circleSize) # startNode
         self.engine.draw.circle(self.screen, RED, (self.targetNode.GetPosition()), self.circleSize) # targetNode
 
-        for node in self.closedList:  # path
-            if pointOne >= len(self.closedList) or pointTwo >= len(self.closedList):
-               pointOne -= 1
-               pointTwo -= 1        
-            self.engine.draw.line(self.screen, PNK, self.closedList[pointOne].GetPosition(), self.closedList[pointTwo].GetPosition(), 6)
-            pointOne += 1
-            pointTwo += 1
+        retracedList = self.astarGrid.Retrace(self.closedList, self.targetNode)        
+        if self.algorithmDone is True: 
+            for node in retracedList:  # path
+                # if pointTwo >= len(self.closedList):
+                    # pointTwo = len(self.closedList)      
+                self.engine.draw.circle(self.screen, PNK, node.GetPosition(), self.circleSize / 2)
+            # pointOne += 1
+            # pointTwo += 1
 
         
          
@@ -173,7 +175,7 @@ class AStarApp:
     def Run(self):       
         finished = False
         while not finished:
-           # self.blockerNode.SetPosition(self.engine.mouse.get_pos()[0], self.engine.mouse.get_pos()[1])
+            # self.blockerNode.SetPosition(self.engine.mouse.get_pos()[0], self.engine.mouse.get_pos()[1])
             for event in self.engine.event.get():               
                 if event.type == self.engine.QUIT:
                     finished = True

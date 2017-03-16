@@ -18,9 +18,9 @@ class Node:
         return (self.xPosition, self.yPosition)
 
     def GetDistance(self, node):
-        xDist = self.xPosition - node.GetPosition()[0]
-        yDist = node.GetPosition()[1] - self.yPosition
-        return abs(xDist + yDist)
+        xDist = abs(self.xPosition - node.GetPosition()[0])
+        yDist = abs(self.yPosition - node.GetPosition()[1])
+        return xDist + yDist
 
     def SetParent(self, parentNode):
         self.parent = parentNode
