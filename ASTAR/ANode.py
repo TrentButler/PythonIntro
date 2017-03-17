@@ -2,7 +2,8 @@ class Node:
     def __init__(self):
         self.data = []
         self.walkable = True
-        self.nodeID = None        
+        self.nodeID = None
+        self.parent = None    
         self.gCost = 0
         self.hCost = 0
         self.fCost = 0
@@ -24,15 +25,7 @@ class Node:
 
     def SetParent(self, parentNode):
         self.parent = parentNode
-
-    def CompareTo(self, X, Y):
-        selfPosition = str(self.xPosition) + "," + str(self.yPosition)
-        comparePosition = str(X) + "," + str(Y)
-        if selfPosition == comparePosition:
-            if self.walkable is True:
-                return True
-        return False
-
+    
     def compareTo(self, positionKey):        
         if self.GetPosition() == positionKey:
             if self.walkable is True:

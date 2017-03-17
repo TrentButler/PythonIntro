@@ -23,6 +23,7 @@ class AStarApp:
         self.data = []
         self.run = True
         self.algorithmDone = False
+        self.pathDrawn = False
 
     def AddGrid(self, appGrid):
         self.astarGrid = appGrid
@@ -41,7 +42,7 @@ class AStarApp:
 
     def RunStarAlgorithum(self):  # PARENTING NEEDS WORK
         self.currentNode.UpdateNode(self.currentNode.gCost, self.currentNode.GetDistance(self.targetNode))
-        self.startNode.SetParent(self.currentNode)        
+        # self.startNode.SetParent(self.currentNode)        
         
         while len(self.openList) is not 0:
             self.openList.sort(key=lambda x: x.fCost)  # SORT OPENLIST
@@ -65,22 +66,21 @@ class AStarApp:
                 if node in self.closedList:
                     continue
                 
-                if node not in self.openList and node.walkable is True:
-                    self.openList.append(node)
-                
-                # if node in self.openList:
-                    # if node.gCost > self.currentNode.gCost:
-                        # node.SetParent(self.currentNode)
-                        # node.UpdateNode(node.gCost, node.GetDistance(self.targetNode))
-                
                 tgCost = self.currentNode.gCost + node.gCost  # needs work
-                if tgCost >= node.gCost:
+
+                if node not in self.openList and node.walkable is True:
+                    node.SetParent(self.currentNode)                                        
+                    self.openList.append(node)
+
+                elif tgCost >= node.gCost:
                     continue
-                # node.SetParent(self.currentNode)
+
                 # node.UpdateNode(tgCost, node.GetDistance(self.targetNode)) 
+                node.SetParent(self.currentNode)
                 node.gCost = tgCost
                 node.hCost = node.GetDistance(self.targetNode)
                 node.fCost = node.gCost + node.hCost
+                
 
     def DrawGrid(self):
         AZU = (240, 255, 255)
@@ -125,15 +125,15 @@ class AStarApp:
         
         self.engine.draw.circle(self.screen, GRE, (self.startNode.GetPosition()), self.circleSize) # startNode
         self.engine.draw.circle(self.screen, RED, (self.targetNode.GetPosition()), self.circleSize) # targetNode
-
-              
-        if self.algorithmDone is True:
-            retracedList = self.astarGrid.Retrace(self.startNode, self.targetNode) 
-            for node in retracedList:  # path                
-                self.engine.draw.line(self.screen, PNK, node.parent.GetPosition(), node.GetPosition(), self.circleSize / 2)
+        
+        if self.algorithmDone is True and self.pathDrawn is False:
+            retracedList = self.astarGrid.Retrace(self.startNode, self.targetNode)            
+            for node in retracedList:  # path
+                if node.parent is None:
+                    break                
+                self.engine.draw.line(self.screen, PNK, node.GetPosition(), node.parent.GetPosition(), self.circleSize - 10)
                 # self.engine.draw.circle(self.screen, PNK, node.GetPosition(), self.circleSize / 2)
-            # pointOne += 1
-            # pointTwo += 1
+            self.pathDrawn = True
 
         
          
@@ -147,6 +147,7 @@ class AStarApp:
         self.astarGrid = self.saveGrid        
         self.run = True
         self.algorithmDone = False
+        self.pathDrawn = False
 
         self.Start()
         self.Run()

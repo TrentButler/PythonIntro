@@ -22,7 +22,7 @@ from ASTAR.AGrid import Grid
 # n.print_info()
 
 runAstar = AStarApp()
-grid = Grid(4, 4)
+grid = Grid(5, 5)
 runAstar.AddGrid(grid)
 runAstar.SetStartNode(1)
 runAstar.SetTargetNode(len(runAstar.astarGrid.grid))
@@ -33,6 +33,12 @@ runAstar.SetTargetNode(len(runAstar.astarGrid.grid))
     # runAstar.astarGrid.grid[x].SetWalkable(False)
 # for x in range(77, 79):
     # runAstar.astarGrid.grid[x].SetWalkable(False)
+
+
+# runAstar.RunStarAlgorithum()
+# retraced = runAstar.astarGrid.Retrace(runAstar.startNode, runAstar.targetNode)
+# for node in retraced:
+    # node.print_info
 
 
 

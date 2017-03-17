@@ -31,76 +31,61 @@ class Grid(object):
     def GetNode(self, ID):
         for node in self.grid:
             if node.nodeID == ID:
-                return node
-
-    # def Retrace(self, nodeList):
-        # if len(nodeList) > 0:
-            # retraced = []
-            # incrementor = len(nodeList) - 1 
-            # running = True
-            # while running is True:
-                # if incrementor == 0:
-                    # running = False
-                    # break
-                # retraced.append(nodeList[incrementor])
-                # incrementor -= 1
-            # return retraced
+                return node    
 
     def Retrace(self, start, end):
         retraced = []
         currentNode = end         
-        while currentNode.nodeID is not start.nodeID:
+        while currentNode.parent is not None:
             retraced.append(currentNode)
             currentNode = currentNode.parent
         return retraced
-            
-        
 
     def GetAdjacentList(self, ID, distance, target):
         adjacentList = []        
         node = self.GetNode(ID)
 
-        diagUpLeft = ((node.xPosition - distance), (node.yPosition - distance))
-        diagUpRight = ((node.xPosition + distance), (node.yPosition - distance))
-        diagDwnLeft = ((node.xPosition - distance), (node.yPosition + distance))
-        diagDwnRight = ((node.xPosition + distance), (node.yPosition + distance))
-        adjacentUp = ((node.xPosition), (node.yPosition - distance))
-        adjacentDown = ((node.xPosition), (node.yPosition + distance))
-        adjacentLeft = ((node.xPosition - distance), (node.yPosition))
-        adjacentRight = ((node.xPosition + distance), (node.yPosition))
+        diagUpLeft = (node.xPosition - distance, node.yPosition - distance)
+        diagUpRight = (node.xPosition + distance, node.yPosition - distance)
+        diagDwnLeft = (node.xPosition - distance, node.yPosition + distance)
+        diagDwnRight = (node.xPosition + distance, node.yPosition + distance)
+        adjacentUp = (node.xPosition, node.yPosition - distance)
+        adjacentDown = (node.xPosition, node.yPosition + distance)
+        adjacentLeft = (node.xPosition - distance, node.yPosition)
+        adjacentRight = (node.xPosition + distance, node.yPosition)
         
         for x in self.grid:
             if x.compareTo(diagUpLeft) is True:
                 x.UpdateNode(self.diagMovement, x.GetDistance(target))
-                x.SetParent(node)
+                # x.SetParent(node)
                 adjacentList.append(x)
             if x.compareTo(diagUpRight) is True:
                 x.UpdateNode(self.diagMovement, x.GetDistance(target))
-                x.SetParent(node)
+                # x.SetParent(node)
                 adjacentList.append(x)
             if x.compareTo(diagDwnLeft) is True:
                 x.UpdateNode(self.diagMovement, x.GetDistance(target))
-                x.SetParent(node)
+                # x.SetParent(node)
                 adjacentList.append(x)
             if x.compareTo(diagDwnRight) is True:
                 x.UpdateNode(self.diagMovement, x.GetDistance(target))
-                x.SetParent(node)
+                # x.SetParent(node)
                 adjacentList.append(x)
             if x.compareTo(adjacentUp) is True:
                 x.UpdateNode(self.regMovement, x.GetDistance(target))
-                x.SetParent(node)
+                # x.SetParent(node)
                 adjacentList.append(x)
             if x.compareTo(adjacentDown) is True:
                 x.UpdateNode(self.regMovement, x.GetDistance(target))
-                x.SetParent(node)
+                # x.SetParent(node)
                 adjacentList.append(x)
             if x.compareTo(adjacentLeft) is True:
                 x.UpdateNode(self.regMovement, x.GetDistance(target))
-                x.SetParent(node)
+                # x.SetParent(node)
                 adjacentList.append(x)
             if x.compareTo(adjacentRight) is True:
                 x.UpdateNode(self.regMovement, x.GetDistance(target))
-                x.SetParent(node)
+                # x.SetParent(node)
                 adjacentList.append(x)
         return adjacentList
 
