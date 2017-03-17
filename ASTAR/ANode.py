@@ -19,14 +19,43 @@ class Node:
         return (self.xPosition, self.yPosition)
 
     def GetDistance(self, node):
-        xDist = abs(self.xPosition - node.GetPosition()[0])
-        yDist = abs(self.yPosition - node.GetPosition()[1])
+        xDist = abs(self.xPosition - node.GetPosition()[0]/80)*10
+        yDist = abs(self.yPosition - node.GetPosition()[1]/80)*10
         return xDist + yDist
+    
+        
+    def getDist(self, node, size):
+        diagUpLeft = (self.xPosition - size, self.yPosition - size)
+        diagUpRight = (self.xPosition + size, self.yPosition - size)
+        diagDwnLeft = (self.xPosition - size, self.yPosition + size)
+        diagDwnRight = (self.xPosition + size, self.yPosition + size)
+        adjacentUp = (self.xPosition, self.yPosition - size)
+        adjacentDown = (self.xPosition, self.yPosition + size)
+        adjacentLeft = (self.xPosition - size, self.yPosition)
+        adjacentRight = (self.xPosition + size, self.yPosition)
+
+        if node.compareTo(diagUpLeft) is True:
+            return 14
+        if node.compareTo(diagUpRight) is True:
+            return 14
+        if node.compareTo(diagDwnLeft) is True:
+            return 14
+        if node.compareTo(diagDwnRight) is True:
+            return 14
+        if node.compareTo(adjacentUp) is True:
+            return 10
+        if node.compareTo(adjacentDown) is True:
+            return 10
+        if node.compareTo(adjacentLeft) is True:
+            return 10
+        if node.compareTo(adjacentRight) is True:
+            return 10
+        print "ERROR"
 
     def SetParent(self, parentNode):
         self.parent = parentNode
     
-    def compareTo(self, positionKey):        
+    def compareTo(self, positionKey):
         if self.GetPosition() == positionKey:
             if self.walkable is True:
                 return True

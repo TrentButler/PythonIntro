@@ -65,14 +65,21 @@ class AStarApp:
             for node in adjList:  # CHECK ALL ADJACENT NODES FOR BEST PATH
                 if node in self.closedList:
                     continue
-                
-                tgCost = self.currentNode.gCost + node.gCost  # needs work
+                poscurrent = (self.currentNode.xPosition, self.currentNode.yPosition)
+                posadjacent = (node.xPosition, node.yPosition)                
+                costtomove = None
+                if abs(posadjacent[0] - poscurrent[0]) or abs(posadjacent[1] - poscurrent[1]) == self.offset:
+                    costtomove = 10
+                else:
+                    costtomove = 14
+                tgCost = self.currentNode.gCost + costtomove  # needs work
 
                 if node not in self.openList and node.walkable is True:
-                    node.SetParent(self.currentNode)                                        
+                    node.SetParent(self.currentNode)
+                    # node.UpdateNode(0, node.GetDistance(self.targetNode))                                       
                     self.openList.append(node)
-
-                elif tgCost >= node.gCost:
+                
+                if tgCost >= node.gCost:
                     continue
 
                 # node.UpdateNode(tgCost, node.GetDistance(self.targetNode)) 
@@ -109,8 +116,10 @@ class AStarApp:
         RED = (255, 0, 0)
         YEL = (255, 255, 0)
         PNK = (255, 0, 255)
+        ORG = (255, 165, 0)
         
-        self.engine.draw.circle(self.screen, PNK, (self.blockerNode.GetPosition()), self.circleSize, 2) # blockerNode
+        self.engine.draw.circle(self.screen, PNK, (self.blockerNode.GetPosition()), 6) # blockerNode
+        self.engine.draw.circle(self.screen, PNK, (self.blockerNode.GetPosition()), self.circleSize / 2, 4) # blockerNode
 
         for node in self.astarGrid.GetAdjacentList(self.currentNode.nodeID, self.offset, self.targetNode): # adjacents
             self.engine.draw.circle(self.screen, BLU, (node.GetPosition()), self.circleSize)
@@ -125,15 +134,21 @@ class AStarApp:
         
         self.engine.draw.circle(self.screen, GRE, (self.startNode.GetPosition()), self.circleSize) # startNode
         self.engine.draw.circle(self.screen, RED, (self.targetNode.GetPosition()), self.circleSize) # targetNode
-        
+
         if self.algorithmDone is True and self.pathDrawn is False:
-            retracedList = self.astarGrid.Retrace(self.startNode, self.targetNode)            
+            retracedList = self.astarGrid.Retrace(self.startNode, self.targetNode)
+            
+            for node in self.openList:
+                self.engine.draw.line(self.screen, ORG, node.GetPosition(), node.parent.GetPosition(), 6)        
             for node in retracedList:  # path
                 if node.parent is None:
                     break                
-                self.engine.draw.line(self.screen, PNK, node.GetPosition(), node.parent.GetPosition(), self.circleSize - 10)
+                self.engine.draw.line(self.screen, PNK, node.GetPosition(), node.parent.GetPosition(), 12)
                 # self.engine.draw.circle(self.screen, PNK, node.GetPosition(), self.circleSize / 2)
-            self.pathDrawn = True
+            
+           
+
+            # self.pathDrawn = True
 
         
          
@@ -144,7 +159,10 @@ class AStarApp:
         self.targetNode = target
         self.startNode = start
         self.blockerNode = Node()
-        self.astarGrid = self.saveGrid        
+        self.astarGrid = self.saveGrid
+        for node in self.astarGrid.grid:
+            node.parent = None
+            node.UpdateNode(0, 0)       
         self.run = True
         self.algorithmDone = False
         self.pathDrawn = False
@@ -196,10 +214,10 @@ class AStarApp:
                 if event.type == self.engine.QUIT:
                     finished = True
 
-                if event.type == self.engine.MOUSEBUTTONDOWN:
-                    for node in self.astarGrid.grid:
-                        if node.GetPosition() == self.blockerNode.GetPosition():
-                            node.SetWalkable(False)
+                # if event.type == self.engine.MOUSEBUTTONDOWN:
+                    # for node in self.astarGrid.grid:
+                        # if node.GetPosition() == self.blockerNode.GetPosition():
+                            # node.SetWalkable(False)
 
                 if event.type == self.engine.KEYDOWN:
                     if self.engine.key.get_pressed()[self.engine.K_F8]:

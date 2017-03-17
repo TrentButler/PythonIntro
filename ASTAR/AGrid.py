@@ -56,27 +56,27 @@ class Grid(object):
         
         for x in self.grid:
             if x.compareTo(diagUpLeft) is True:
-                x.UpdateNode(self.diagMovement, x.GetDistance(target))
+                # x.UpdateNode(self.diagMovement, x.GetDistance(target))
                 # x.SetParent(node)
                 adjacentList.append(x)
             if x.compareTo(diagUpRight) is True:
-                x.UpdateNode(self.diagMovement, x.GetDistance(target))
+                # x.UpdateNode(self.diagMovement, x.GetDistance(target))
                 # x.SetParent(node)
                 adjacentList.append(x)
             if x.compareTo(diagDwnLeft) is True:
-                x.UpdateNode(self.diagMovement, x.GetDistance(target))
+                # x.UpdateNode(self.diagMovement, x.GetDistance(target))
                 # x.SetParent(node)
                 adjacentList.append(x)
             if x.compareTo(diagDwnRight) is True:
-                x.UpdateNode(self.diagMovement, x.GetDistance(target))
+                # x.UpdateNode(self.diagMovement, x.GetDistance(target))
                 # x.SetParent(node)
                 adjacentList.append(x)
             if x.compareTo(adjacentUp) is True:
-                x.UpdateNode(self.regMovement, x.GetDistance(target))
+                # x.UpdateNode(self.regMovement, x.GetDistance(target))
                 # x.SetParent(node)
                 adjacentList.append(x)
             if x.compareTo(adjacentDown) is True:
-                x.UpdateNode(self.regMovement, x.GetDistance(target))
+                # x.UpdateNode(self.regMovement, x.GetDistance(target))
                 # x.SetParent(node)
                 adjacentList.append(x)
             if x.compareTo(adjacentLeft) is True:
