@@ -4,7 +4,7 @@ from ASTAR.AGrid import Grid
 
 
 runAstar = AStarApp()
-grid = Grid(10, 10)
+grid = Grid(20, 10)
 runAstar.AddGrid(grid)
 runAstar.SetStartNode(1)
 runAstar.SetTargetNode(len(runAstar.astarGrid.grid))

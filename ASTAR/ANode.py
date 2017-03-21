@@ -3,7 +3,9 @@ class Node:
         self.data = []
         self.walkable = True
         self.nodeID = None
-        self.parent = None    
+        self.parent = None
+        self.xIndex = None
+        self.yIndex = None
         self.gCost = 0
         self.hCost = 0
         self.fCost = 0
@@ -19,10 +21,12 @@ class Node:
         return (self.xPosition, self.yPosition)
 
     def GetDistance(self, node):
-        xDist = abs(self.xPosition - node.GetPosition()[0]/80)*10
-        yDist = abs(self.yPosition - node.GetPosition()[1]/80)*10
+        xDist = abs(self.xIndex - node.xIndex) * 10
+        yDist = abs(self.yIndex - node.yIndex) * 10
         return xDist + yDist
-    
+        # needs work
+        # base this in the grid
+        # needs to be dependant on node position  
         
     def getDist(self, node, size):
         diagUpLeft = (self.xPosition - size, self.yPosition - size)

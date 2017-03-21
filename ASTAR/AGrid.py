@@ -21,6 +21,8 @@ class Grid(object):
             self.nodeCount += 1
         for x in self.grid:
             x.SetPosition(self.xIncrementor, self.yIncrementor)
+            x.xIndex = self.xIncrementor
+            x.yIndex = self.yIncrementor
             self.xIncrementor += 1
             if self.xIncrementor == xBounds:
                 self.xIncrementor = 0
@@ -42,91 +44,128 @@ class Grid(object):
         return retraced
 
     def GetAdjacentList(self, ID, distance, target):
-        adjacentList = []        
+        adjacentList = []
+        adjacents = []        
         node = self.GetNode(ID)
 
-        diagUpLeft = (node.xPosition - distance, node.yPosition - distance)
-        diagUpRight = (node.xPosition + distance, node.yPosition - distance)
-        diagDwnLeft = (node.xPosition - distance, node.yPosition + distance)
-        diagDwnRight = (node.xPosition + distance, node.yPosition + distance)
-        adjacentUp = (node.xPosition, node.yPosition - distance)
-        adjacentDown = (node.xPosition, node.yPosition + distance)
-        adjacentLeft = (node.xPosition - distance, node.yPosition)
-        adjacentRight = (node.xPosition + distance, node.yPosition)
+        a_adjacentRight = (node.xPosition + distance, node.yPosition)
+        b_diagUpRight = (node.xPosition + distance, node.yPosition - distance)
+        c_adjacentUp = (node.xPosition, node.yPosition - distance)
+        d_diagUpLeft = (node.xPosition - distance, node.yPosition - distance)
+        e_adjacentLeft = (node.xPosition - distance, node.yPosition)
+        f_diagDwnLeft = (node.xPosition - distance, node.yPosition + distance)
+        g_adjacentDown = (node.xPosition, node.yPosition + distance)
+        h_diagDwnRight = (node.xPosition + distance, node.yPosition + distance)
         
         for x in self.grid:
-            if x.compareTo(diagUpLeft) is True:
-                # x.UpdateNode(self.diagMovement, x.GetDistance(target))
+            if x.compareTo(d_diagUpLeft) is True:
+                x.UpdateNode(self.diagMovement, x.GetDistance(target))
                 # x.SetParent(node)
-                adjacentList.append(x)
-            if x.compareTo(diagUpRight) is True:
-                # x.UpdateNode(self.diagMovement, x.GetDistance(target))
+                adjacents.append(("d", x))
+                # adjacentList.append(x)
+            if x.compareTo(b_diagUpRight) is True:
+                x.UpdateNode(self.diagMovement, x.GetDistance(target))
                 # x.SetParent(node)
-                adjacentList.append(x)
-            if x.compareTo(diagDwnLeft) is True:
-                # x.UpdateNode(self.diagMovement, x.GetDistance(target))
+                adjacents.append(("b", x))
+                # adjacentList.append(x)
+            if x.compareTo(f_diagDwnLeft) is True:
+                x.UpdateNode(self.diagMovement, x.GetDistance(target))
                 # x.SetParent(node)
-                adjacentList.append(x)
-            if x.compareTo(diagDwnRight) is True:
-                # x.UpdateNode(self.diagMovement, x.GetDistance(target))
+                adjacents.append(("f", x))
+                # adjacentList.append(x)
+            if x.compareTo(h_diagDwnRight) is True:
+                x.UpdateNode(self.diagMovement, x.GetDistance(target))
                 # x.SetParent(node)
-                adjacentList.append(x)
-            if x.compareTo(adjacentUp) is True:
-                # x.UpdateNode(self.regMovement, x.GetDistance(target))
-                # x.SetParent(node)
-                adjacentList.append(x)
-            if x.compareTo(adjacentDown) is True:
-                # x.UpdateNode(self.regMovement, x.GetDistance(target))
-                # x.SetParent(node)
-                adjacentList.append(x)
-            if x.compareTo(adjacentLeft) is True:
+                adjacents.append(("h", x))
+                # adjacentList.append(x)
+            if x.compareTo(c_adjacentUp) is True:
                 x.UpdateNode(self.regMovement, x.GetDistance(target))
                 # x.SetParent(node)
-                adjacentList.append(x)
-            if x.compareTo(adjacentRight) is True:
+                adjacents.append(("c", x))
+                # adjacentList.append(x)
+            if x.compareTo(g_adjacentDown) is True:
                 x.UpdateNode(self.regMovement, x.GetDistance(target))
                 # x.SetParent(node)
-                adjacentList.append(x)
+                adjacents.append(("g", x))
+                # adjacentList.append(x)
+            if x.compareTo(e_adjacentLeft) is True:
+                x.UpdateNode(self.regMovement, x.GetDistance(target))
+                # x.SetParent(node)
+                adjacents.append(("e", x))
+                # adjacentList.append(x)
+            if x.compareTo(a_adjacentRight) is True:
+                x.UpdateNode(self.regMovement, x.GetDistance(target))
+                # x.SetParent(node)
+                adjacents.append(("a", x))
+                # adjacentList.append(x)
+
+        # for node in adjacentDict:
+        adjacents.sort(key=lambda x: x[0])
+        for node in adjacents:
+            adjacentList.append(node[1])
+        
         return adjacentList
-
-    def GetAdjacentDictionary(self, ID, distance, target):
-        adjacentDictionary = {}
-
+   
+    def drawAdjacents(self, ID, distance):        
+        adjacentList = []
+        adjacents = []        
         node = self.GetNode(ID)
 
-        diagUpLeft = ((node.xPosition - distance), (node.yPosition - distance))
-        diagUpRight = ((node.xPosition + distance), (node.yPosition - distance))
-        diagDwnLeft = ((node.xPosition - distance), (node.yPosition + distance))
-        diagDwnRight = ((node.xPosition + distance), (node.yPosition + distance))
-        adjacentUp = ((node.xPosition), (node.yPosition - distance))
-        adjacentDown = ((node.xPosition), (node.yPosition + distance))
-        adjacentLeft = ((node.xPosition - distance), (node.yPosition))
-        adjacentRight = ((node.xPosition + distance), (node.yPosition))
-
+        a_adjacentRight = (node.xPosition + distance, node.yPosition)
+        b_diagUpRight = (node.xPosition + distance, node.yPosition - distance)
+        c_adjacentUp = (node.xPosition, node.yPosition - distance)
+        d_diagUpLeft = (node.xPosition - distance, node.yPosition - distance)
+        e_adjacentLeft = (node.xPosition - distance, node.yPosition)
+        f_diagDwnLeft = (node.xPosition - distance, node.yPosition + distance)
+        g_adjacentDown = (node.xPosition, node.yPosition + distance)
+        h_diagDwnRight = (node.xPosition + distance, node.yPosition + distance)
+        
         for x in self.grid:
-            if x.compareTo(diagUpLeft) is True:
-                x.UpdateNode(self.diagMovement, x.GetDistance(target))
-                adjacentDictionary["DIAGUPLEFT"] = x
-            if x.compareTo(diagUpRight) is True:
-                x.UpdateNode(self.diagMovement, x.GetDistance(target))
-                adjacentDictionary["DIAGUPRIGHT"] = x
-            if x.compareTo(diagDwnLeft) is True:
-                x.UpdateNode(self.diagMovement, x.GetDistance(target))
-                adjacentDictionary["DIAGDWNLEFT"] = x
-            if x.compareTo(diagDwnRight) is True:
-                x.UpdateNode(self.diagMovement, x.GetDistance(target))
-                adjacentDictionary["DIAGDWNRIGHT"] = x
-            if x.compareTo(adjacentUp) is True:
-                x.UpdateNode(self.regMovement, x.GetDistance(target))
-                adjacentDictionary["UP"] = x
-            if x.compareTo(adjacentDown) is True:
-                x.UpdateNode(self.regMovement, x.GetDistance(target))
-                adjacentDictionary["DOWN"] = x
-            if x.compareTo(adjacentLeft) is True:
-                x.UpdateNode(self.regMovement, x.GetDistance(target))
-                adjacentDictionary["LEFT"] = x
-            if x.compareTo(adjacentRight) is True:
-                x.UpdateNode(self.regMovement, x.GetDistance(target))
-                adjacentDictionary["RIGHT"] = x
+            if x.compareTo(d_diagUpLeft) is True:
+                #x.UpdateNode(self.diagMovement, x.GetDistance(target))
+                # x.SetParent(node)
+                adjacents.append(("d", x))
+                # adjacentList.append(x)
+            if x.compareTo(b_diagUpRight) is True:
+                #x.UpdateNode(self.diagMovement, x.GetDistance(target))
+                # x.SetParent(node)
+                adjacents.append(("b", x))
+                # adjacentList.append(x)
+            if x.compareTo(f_diagDwnLeft) is True:
+                #x.UpdateNode(self.diagMovement, x.GetDistance(target))
+                # x.SetParent(node)
+                adjacents.append(("f", x))
+                # adjacentList.append(x)
+            if x.compareTo(h_diagDwnRight) is True:
+                #x.UpdateNode(self.diagMovement, x.GetDistance(target))
+                # x.SetParent(node)
+                adjacents.append(("h", x))
+                # adjacentList.append(x)
+            if x.compareTo(c_adjacentUp) is True:
+                #x.UpdateNode(self.regMovement, x.GetDistance(target))
+                # x.SetParent(node)
+                adjacents.append(("c", x))
+                # adjacentList.append(x)
+            if x.compareTo(g_adjacentDown) is True:
+                #x.UpdateNode(self.regMovement, x.GetDistance(target))
+                # x.SetParent(node)
+                adjacents.append(("g", x))
+                # adjacentList.append(x)
+            if x.compareTo(e_adjacentLeft) is True:
+                #x.UpdateNode(self.regMovement, x.GetDistance(target))
+                # x.SetParent(node)
+                adjacents.append(("e", x))
+                # adjacentList.append(x)
+            if x.compareTo(a_adjacentRight) is True:
+                #x.UpdateNode(self.regMovement, x.GetDistance(target))
+                # x.SetParent(node)
+                adjacents.append(("a", x))
+                # adjacentList.append(x)
 
-        return adjacentDictionary
+        # for node in adjacentDict:
+        adjacents.sort(key=lambda x: x[0])
+        for node in adjacents:
+            adjacentList.append(node[1])
+        
+        return adjacentList
+        
