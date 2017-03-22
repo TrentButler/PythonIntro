@@ -1,0 +1,110 @@
+15:43 - 
+absent
+10:36 - 13:40
+"Created '_trello' python script"
+"Further research on json required"
+"Further research on 'Trello API' required"
+09:14 - 13:08
+"Quiz on Astar"
+"Continued work on Astar project"
+"Lecture on 'Flow fields'"
+
+13:59 - 18:09 
+"Continued work on Astar project"
+"Further research on MHD() required"
+"Began '_webParser' python script"
+
+08:11 - 13:00
+"Lecture on Astar improvements"
+"Continued work on Astar project"
+"Further research on 'Retrace()' function required"
+
+14:02 - 17:55
+"Continued work on Astar project"
+"Created "Retrace()" function"
+"Further research on 'Retrace()' function required"
+"Further research on Astar 'parenting' required"
+13:08 - 18:15
+"Worked on Astar project"
+"One on one with instructor Matthew"
+"Further research on Astar algorithm required"
+23:28 - 01:07
+"Worked on Astar project"
+"Further research on 'Astar' algorithm required"
+04:45 - 08:20
+"Worked on 'Astar' project"
+"Implemented 'astar' algorithum into pathfinding application"
+"Further research on heuristics requred"
+10:19 - 11:45
+"Worked on 'Astar' project"
+"Revised class AstarApp 'Start()'"
+08:48 - 12:30
+"Lecture on 'Astar' algorithm"
+
+12:30 - 19:21
+"Continued work on Astar project"
+"One on one with instructor Matthew"
+"Research on aspect ratio required"
+08:24 - 12:55
+"Worked on Astar project"
+
+14:07 - 17:59
+"Continued work on Astar project"
+"Implemented module 'pygame'"
+
+00:32 - 01:53
+"Worked on Astar project"
+"Revised 'GetAdjacentList()' function"
+11:56 - 17:55
+"Presentation with head of AIE"
+"Lecture on Astar"
+"Continued work on Astar project"
+07:59 - 10:02
+"Worked on 'Astar' project"
+"Implemented 'GetAdjacent' method"
+
+11:26 - 11:47
+"Continued work on 'Astar' project"
+09:58 - 10:48
+"Continued work on 'Astar' project"
+"Implemented list 'Grid'"
+"Further research on python list methods required"
+11:31 - 12:48
+"Worked on Astar algorithm"
+01:16 - 03:41
+"Researched A* algorithm"
+"Began implementing class AStar"
+"Began implementing class Node"
+01:21 - 04:56
+"Researched python module importing"
+"Created class FSM in python"
+"Further research on 'A*' algorithm required"
+"Further research on python event handling required"
+
+08:26 - 12:27
+"Interview with Instructor Matthew"
+
+14:17 - 17:15
+"Began research on A* algorithm"
+"Lecture on A* algorithm"
+07:59 - 12:25
+"Continued work on Assessment 4"
+"Revised 'NextRound()' function"
+
+13:35 - 17:53
+"Mr.Matt parse Trello test"
+"Mr.Matt parse Trello test 2"
+"Continued work Assessment 4 documentation"
+
+22:45 - 00:25
+"Completed Assessment 4 documentation"
+13:04 - 17:54
+"Continued work on Assessment 4"
+"Meeting with Mr.Robin"
+"Further research on lambda required"
+
+19:37 - 22:28
+"Began Assessment 4 documentation"
+"Class State documentation/UML completed
+"Class FSM<T> documentation/UML completed"
+

@@ -10,19 +10,19 @@ class Grid(object):
         self.diagMovement = 14
         self.regMovement = 10
         self.xIncrementor = 0
-        self.yIncrementor = 0        
+        self.yIncrementor = 0
         self.xLimit = xBounds
         self.yLimit = yBounds
         self.data = []
-        for x in range(0, int((xBounds * yBounds))):
-            newNode = Node()
-            newNode.nodeID = x + 1
-            self.grid.append(newNode)
+        for node in range(0, int((xBounds * yBounds))):
+            new = Node()
+            new.nodeID = node + 1
+            self.grid.append(new)
             self.nodeCount += 1
-        for x in self.grid:
-            x.SetPosition(self.xIncrementor, self.yIncrementor)
-            x.xIndex = self.xIncrementor
-            x.yIndex = self.yIncrementor
+        for node in self.grid:
+            node.SetPosition(self.xIncrementor, self.yIncrementor)
+            node.xIndex = self.xIncrementor
+            node.yIndex = self.yIncrementor
             self.xIncrementor += 1
             if self.xIncrementor == xBounds:
                 self.xIncrementor = 0
@@ -33,11 +33,11 @@ class Grid(object):
     def GetNode(self, ID):
         for node in self.grid:
             if node.nodeID == ID:
-                return node    
+                return node
 
     def Retrace(self, start, end):
         retraced = []
-        currentNode = end         
+        currentNode = end
         while currentNode.parent is not None:
             retraced.append(currentNode)
             currentNode = currentNode.parent
@@ -45,7 +45,7 @@ class Grid(object):
 
     def GetAdjacentList(self, ID, distance, target):
         adjacentList = []
-        adjacents = []        
+        adjacents = []
         node = self.GetNode(ID)
 
         a_adjacentRight = (node.xPosition + distance, node.yPosition)
@@ -56,7 +56,7 @@ class Grid(object):
         f_diagDwnLeft = (node.xPosition - distance, node.yPosition + distance)
         g_adjacentDown = (node.xPosition, node.yPosition + distance)
         h_diagDwnRight = (node.xPosition + distance, node.yPosition + distance)
-        
+
         for x in self.grid:
             if x.compareTo(d_diagUpLeft) is True:
                 x.UpdateNode(self.diagMovement, x.GetDistance(target))
@@ -103,12 +103,12 @@ class Grid(object):
         adjacents.sort(key=lambda x: x[0])
         for node in adjacents:
             adjacentList.append(node[1])
-        
+
         return adjacentList
-   
-    def drawAdjacents(self, ID, distance):        
+
+    def drawAdjacents(self, ID, distance):
         adjacentList = []
-        adjacents = []        
+        adjacents = []
         node = self.GetNode(ID)
 
         a_adjacentRight = (node.xPosition + distance, node.yPosition)
@@ -119,7 +119,7 @@ class Grid(object):
         f_diagDwnLeft = (node.xPosition - distance, node.yPosition + distance)
         g_adjacentDown = (node.xPosition, node.yPosition + distance)
         h_diagDwnRight = (node.xPosition + distance, node.yPosition + distance)
-        
+
         for x in self.grid:
             if x.compareTo(d_diagUpLeft) is True:
                 #x.UpdateNode(self.diagMovement, x.GetDistance(target))
@@ -166,6 +166,6 @@ class Grid(object):
         adjacents.sort(key=lambda x: x[0])
         for node in adjacents:
             adjacentList.append(node[1])
-        
+
         return adjacentList
         
