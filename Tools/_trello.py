@@ -15,13 +15,13 @@ processThis = _TRELLOAPI.cards.get_action('57b47a1d722df06b05a38f7e')
 
 def stripString(s):
     # NEEDS WORK
-    charList = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', ':', '-', '\n']
+    charList = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '-', '\n']
     returnString = ''
     for c in s:
         for CHARACTER in charList:
             if c == CHARACTER:
                 returnString += c
-    if len(returnString) < 11:
+    if len(returnString) < 9:
         return ""
     return returnString    
     
