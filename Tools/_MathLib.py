@@ -1,11 +1,12 @@
 import math
 
+
 class Vector2(object):
     '''VECTOR2'''
 
     def __init__(self, x, y):
-        self._x = x
-        self._y = y
+        self._x = float(x)
+        self._y = float(y)
 
     def _get_x(self):
         return self._x
@@ -25,6 +26,35 @@ class Vector2(object):
         '''DOT'''
         return (self._x * vec2._getX()) + (self._y * vec2._getY())
 
+    def __add__(self, other):
+        return Vector2(self._x + other._get_x(), self._y + other._get_y())
+
+    def __iadd__(self, other):
+        self._x = self._x + other._x
+        self._y = self._y + other._y
+
+    def __sub__(self, other):
+        return Vector2(abs(self._x - other._get_x()), abs(self._y - other._get_y()))
+        
+
+
+    def __mul__(self, other):
+        return Vector2(self._x * other, self._y * other)
+
+    def __lt__(self, other):
+        if self._x < other._x and self._y == other._y:
+            return True
+        return False
+
+    def __gt__(self, other):
+        if self._x > other._x and self._y > other._y:
+            return True
+        return False
+
+    def __eq__(self, other):
+        if self._x == other._x and self._y == other._y:
+            return True
+        return False
 
 class Vector3(object):
     '''VECTOR3'''

@@ -15,11 +15,16 @@ processThis = _TRELLOAPI.cards.get_action('57b47a1d722df06b05a38f7e')
 
 def stripString(s):
     # NEEDS WORK
+    charList = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', ':', '-', '\n']
     returnString = ''
     for c in s:
-        if c >= 32 or c <= 64:
-            returnString += c
-    return returnString
+        for CHARACTER in charList:
+            if c == CHARACTER:
+                returnString += c
+    if len(returnString) < 11:
+        return ""
+    return returnString    
+    
 
 
 for _dict in processThis:
@@ -28,8 +33,8 @@ for _dict in processThis:
         _dataDICT = _dict['data']
         if _dataDICT.has_key('text'):
             # NEEDS WORK
-            # work.write(stripString(str(_dataDICT['text'])) + "\n")
-            work.write(_dataDICT['text'] + "\n")
+            work.write(stripString(str(_dataDICT['text'])) + "\n")
+            # work.write(_dataDICT['text'] + "\n")
 
 work.close()
 print "SUCCESS"
