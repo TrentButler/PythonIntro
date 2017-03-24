@@ -20,6 +20,7 @@ class Vector2(object):
 
     def norm(self):
         '''NORMALIZE'''
+        work = self.mag()
         return Vector2(self._x / self.mag(), self._y / self.mag())
 
     def dot(self, vec2):
@@ -34,7 +35,7 @@ class Vector2(object):
         self._y = self._y + other._y
 
     def __sub__(self, other):
-        return Vector2(abs(self._x - other._get_x()), abs(self._y - other._get_y()))
+        return Vector2((self._x - other._get_x()), (self._y - other._get_y()))
         
 
 

@@ -35,7 +35,7 @@ class Grid(object):
             if node.nodeID == ID:
                 return node
 
-    def Retrace(self, start, end):
+    def Retrace(self, end):
         retraced = []
         currentNode = end
         while currentNode.parent is not None:
