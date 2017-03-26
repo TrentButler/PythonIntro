@@ -1,4 +1,5 @@
 class _FSM:
+	'''FSM'''
 	
 
 	def __init__(self):
@@ -14,11 +15,10 @@ class _FSM:
 		if stateKey not in self.states:
 			self.states[stateKey] = addState
 
-	def AddTransition(self, stateFrom, stateTo):
-		transitionKey = str(stateFrom) + "->" + str(stateTo)
-		Transition = (stateFrom,stateTo)
+	def AddTransition(self, transition):
+		transitionKey = str(transition[0]) + "->" + str(transition[1])
 		if transitionKey not in self.transitions:
-			self.transitions[transitionKey] = Transition
+			self.transitions[transitionKey] = transition
 
 	def ChangeState(self, stateTo):
 		transitionKey = str(self.currentstate) + "->" + str(stateTo)
