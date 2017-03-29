@@ -1,12 +1,11 @@
 import sys
-sys.path.insert(0, "c:\Users\Redtrent\Documents\GitHub\PythonIntro")
+sys.path.insert(0, "C:\Users\\trent.butler\Documents\GitHub\PythonIntro")
 from ENGINE._engine import Engine
 from Tools._MathLib import Vector2
 from steer_agent import SteerAgent
 import pygame
 
 # NEEDS WORK
- 
 class SteerApp(Engine):
     def __init__(self, screenBounds):
         super(SteerApp, self).__init__(screenBounds)
@@ -30,6 +29,8 @@ class SteerApp(Engine):
                 if checking is agent:
                     continue
                 if agentONE == agentTWO:
+                    agent._velocity = Vector2(0,0)
+                    checking._velocity = Vector2(0,0)
                     print "COLLISION"
 
                 
@@ -67,6 +68,9 @@ class SteerApp(Engine):
             return False
         for agent in self._agentList:
             self.engine.draw.circle(self._screen, (0, 255, 0), (int(agent._getpos()[0]), int(agent._getpos()[1])), self._size)
+            # pointA = (agent._position._get_x() + self._size / 2, agent._position._get_y())
+            # pointB = (agent._position._get_x() - self._size / 2, agent._position._get_y())
+            # self.engine.draw.lines(self._screen, (0, 255, 0), True, [pointA, pointB, (agent._heading._get_x(), agent._heading._get_y())])
         self.engine.draw.circle(self._screen, (255,255,255), (int(self._mouseAgent._getpos()[0]), int(self._mouseAgent._getpos()[1])), self._size, 4)
         # self.engine.draw.circle(self._screen, (255,255,255), (int(self._target._getpos()[0]), int(self._target._getpos()[1])), 30)
         return True
@@ -96,10 +100,14 @@ class SteerApp(Engine):
                             for agent in self._agentList:
                                 agent._state_machine.ChangeState('FLEE')
                         
+                        if self.engine.key.get_pressed()[self.engine.K_F4]:
+                            for agent in self._agentList:
+                                agent._state_machine.ChangeState('WANDER')
+
                         if self.engine.key.get_pressed()[self.engine.K_TAB]:
                             count = len(self._agentList)
                             agent = SteerAgent('AGENT(' + str(count) + ')')
-                            agent._init(Vector2(self._boundary[0] / 2, self._boundary[1] / 2), (60 + (len(self._agentList) * 10) ), 10 + len(self._agentList))
+                            agent._init(Vector2(self._boundary[0] / 2, self._boundary[1] / 2), (60 + (len(self._agentList) * 10) ), 1 + count)
                             self._addAgent(agent)
 
                     if event.type == self.engine.QUIT:
@@ -115,10 +123,12 @@ app = SteerApp((1200, 600))
 
 agent_one = SteerAgent('agent_one')
 agent_two = SteerAgent('agent_two')
-agent_one._init(Vector2(0, app._boundary[1] / 2), 60, 1)
-agent_two._init(Vector2(app._boundary[0], app._boundary[1] / 2), 60, 10)
+# agent_one._init(Vector2(0, app._boundary[1] / 2), 60, 1)
+# agent_two._init(Vector2(app._boundary[0], app._boundary[1] / 2), 60, 1)
 
+agent_one._init(Vector2(app._boundary[0] / 2, 0), 60, 1)
+agent_two._init(Vector2(app._boundary[0] / 3, 0), 60, 2)
 
-app._addAgent(agent_one)
-app._addAgent(agent_two)
+# app._addAgent(agent_one)
+# app._addAgent(agent_two)
 app.run()

@@ -2,7 +2,7 @@ import pygame
 
 class Engine(object):
     '''ENGINE'''
-    def __init__(self,screenbounds):        
+    def __init__(self,screenbounds):
         self.engine = pygame
         self.engine.init()
         self._screen = self.engine.display.set_mode(screenbounds)
