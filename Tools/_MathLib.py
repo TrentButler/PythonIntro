@@ -56,6 +56,10 @@ class Vector2(object):
             return True
         return False
 
+    def __neg__(self):
+        return Vector2(-self._get_x(), -self._get_y())
+
+
 class Vector3(object):
     '''VECTOR3'''
 

@@ -1,11 +1,12 @@
 from Tools._MathLib import Vector2
 from FSM._FSM import _FSM
+from AGENT._agent import Agent
 
-class Agent:
-    
+class SteerAgent(Agent):
+    '''STEER AGENT'''
 
     def __init__(self, name):
-        self._name = name        
+        super(SteerAgent, self).__init__(name)
     
     def _init(self, posVec, max_vel, mass):
         self._state_machine = _FSM()
@@ -55,31 +56,26 @@ class Agent:
         return Vector2(_xdist, _ydist)
 
     def _run(self, deltaTime, target):
-        self._current = self._state_machine.currentstate              
-        if self._current is 'INIT':
-            # print "INIT STATE"
-            self._state_machine.ChangeState('IDLE')
-        if self._current is 'IDLE':
-            # self._position = self._position + Vector2(1,1)
-            # self._velocity = Vector2(1, 1)
-            # self._velocity = self._velocity * deltaTime
-            self._position = self._position + ((self._velocity * deltaTime))
-            # self._heading = self._velocity.norm()
-            print "IDLE STATE"
-        if self._current is 'SEEK':
-            # WHAT I NEED.
-            # VECTOR * VECTOR
-            # VECTOR * SCALER            
+        if super(SteerAgent, self)._run():
 
-            # NEEDS WORK
+            self._current = self._state_machine.currentstate
 
-            self._velocity = self._velocity + ((self._seek(target) * deltaTime) * self._mass)
-            self._position = self._position + (self._velocity * deltaTime)
-            self._heading = self._velocity.norm()
-            print "SEEK STATE"
+            if self._current is 'INIT':                
+                self._state_machine.ChangeState('IDLE')
 
-        if self._current is 'FLEE':
-            self._velocity = self._velocity + ((self._flee(target) * deltaTime) * self._mass) 
-            self._position = self._position + (self._velocity * deltaTime)
-            self._heading = self._velocity.norm()
-            print "FLEE STATE"
+            if self._current is 'IDLE':
+                accel = self._velocity * deltaTime
+                self._position = self._position + accel
+                # print "IDLE STATE"
+
+            if self._current is 'SEEK':
+                self._velocity = self._velocity + ((self._seek(target) * deltaTime) * self._mass)
+                self._position = self._position + (self._velocity * deltaTime)
+                self._heading = self._velocity.norm()
+                # print "SEEK STATE"
+
+            if self._current is 'FLEE':
+                self._velocity = self._velocity + ((self._flee(target) * deltaTime) * self._mass) 
+                self._position = self._position + (self._velocity * deltaTime)
+                self._heading = self._velocity.norm()
+                # print "FLEE STATE"

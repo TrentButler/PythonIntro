@@ -40,7 +40,8 @@ class PhysicsApp(Engine):
                             self._running = False
                         if self.engine.key.get_pressed()[self.engine.K_w]:
                             for obj in self._objectlist:
-                                obj._velocity = Vector2(0, 20)
+                                # obj._velocity = Vector2(0, 20)
+                                setattr(obj, '_velocity', Vector2(0, 20))
                                 # needs work
         
                 self._update()
@@ -52,7 +53,6 @@ class PhysicsApp(Engine):
     def _addobject(self, gameobj):
         if gameobj not in self._objectlist:
             self._objectlist.append(gameobj)
-
 
 def init_agent(position):
     # self._state_machine = _FSM()
