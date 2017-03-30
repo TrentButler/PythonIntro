@@ -19,7 +19,9 @@ class Vector2(object):
         return math.sqrt((self._x * self._x) + (self._y * self._y))
 
     def norm(self):
-        '''NORMALIZE'''        
+        '''NORMALIZE'''
+        if self.mag() <= 0:
+            return Vector2(0, 0)
         return Vector2(self._x / self.mag(), self._y / self.mag())
 
     def dot(self, vec2):

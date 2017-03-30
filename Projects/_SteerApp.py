@@ -4,6 +4,7 @@ from ENGINE._engine import Engine
 from Tools._MathLib import Vector2
 from steer_agent import SteerAgent
 import pygame
+import os
 
 # NEEDS WORK
 class SteerApp(Engine):
@@ -58,7 +59,7 @@ class SteerApp(Engine):
         if super(SteerApp, self)._update() is False:
             return False
         for agent in self._agentList:
-            agent._run(self._timer, self._mouseAgent)
+            agent._run(self._timer, self._target)
             # print agent._name + "(" + str(agent._heading._get_x()) + "," + str(agent._heading._get_y()) + ")" + str(agent._getpos())
             # continue
         return True     
@@ -68,6 +69,8 @@ class SteerApp(Engine):
             return False
         for agent in self._agentList:
             self.engine.draw.circle(self._screen, (0, 255, 0), (int(agent._getpos()[0]), int(agent._getpos()[1])), self._size)
+            if agent._current is 'WANDER':
+                self.engine.draw.line(self._screen, (255, 255, 255), (int(agent._getpos()[0]), int(agent._getpos()[1])), (int(agent._wandercirc._getpos()[0]), int(agent._wandercirc._getpos()[1])), 4)
             # pointA = (agent._position._get_x() + self._size / 2, agent._position._get_y())
             # pointB = (agent._position._get_x() - self._size / 2, agent._position._get_y())
             # self.engine.draw.lines(self._screen, (0, 255, 0), True, [pointA, pointB, (agent._heading._get_x(), agent._heading._get_y())])
@@ -119,16 +122,42 @@ class SteerApp(Engine):
                 self.engine.display.flip()
         super(SteerApp, self)._shutdown()
 
-app = SteerApp((1200, 600))
+# app = SteerApp((1200, 600))
 
 agent_one = SteerAgent('agent_one')
 agent_two = SteerAgent('agent_two')
 # agent_one._init(Vector2(0, app._boundary[1] / 2), 60, 1)
 # agent_two._init(Vector2(app._boundary[0], app._boundary[1] / 2), 60, 1)
 
-agent_one._init(Vector2(app._boundary[0] / 2, 0), 60, 1)
-agent_two._init(Vector2(app._boundary[0] / 3, 0), 60, 2)
+agent_one._init(Vector2(100, 100), 60, 1)
+agent_two._init(Vector2(0, 0), 60, 2)
+# app._target = agent_two
+
+agent_one._run(1, agent_two)
+agent_two._run(1, agent_one)
+
+agent_one._state_machine.ChangeState('SEEK')
+agent_two._state_machine.ChangeState('IDLE')
+
+while True:
+    os.system('cls')
+    counter = 0
+    agent_one._run(1, agent_two)
+    agent_two._run(1, agent_one)
+    if agent_one._getpos() == agent_two._getpos():
+        break
+    if counter > 10000:
+        break
+    print "agentONE" + str(agent_one._getpos()) + str(agent_one._current)
+    print "agentTWO" + str(agent_two._getpos()) + str(agent_two._current)
+    counter += 1
+    
+os.system('cls')
+print "agentONE" + str(agent_one._getpos())
+print "agentTWO" + str(agent_two._getpos())
+
+
 
 # app._addAgent(agent_one)
 # app._addAgent(agent_two)
-app.run()
+# app.run()

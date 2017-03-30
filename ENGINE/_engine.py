@@ -9,7 +9,7 @@ class Engine(object):
         # self._events = self.engine.event.get()
         self._clock = self.engine.time.Clock()
         self._timer = 0.0        
-        self._fps = 60
+        self._fps = 30
         self._running = True
 
     def _startup(self, func):
@@ -17,7 +17,7 @@ class Engine(object):
         return True
 
     def _update(self):
-        self._timer = float(self._clock.get_time()) * 0.001
+        self._timer = float(self._clock.get_time()) / 1000.0
 
         # print self._timer       
         for event in self.engine.event.get():
