@@ -28,6 +28,10 @@ class Vector2(object):
         '''DOT'''
         return (self._x * vec2._getX()) + (self._y * vec2._getY())
 
+    def vecmult(self, vec2):
+        '''VECTOR MULT'''
+        return Vector2(self.x * vec2.x, self.y * vec2.y)
+
     def __add__(self, other):
         return Vector2(self._x + other._get_x(), self._y + other._get_y())
 

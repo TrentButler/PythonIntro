@@ -10,7 +10,7 @@ class _FSM:
 		self.stopstate = None
 		self.startstate = None
 
-	def AddState(self,addState):
+	def AddState(self, addState):
 		stateKey = str(addState)
 		if stateKey not in self.states:
 			self.states[stateKey] = addState
