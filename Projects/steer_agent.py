@@ -41,6 +41,7 @@ class SteerAgent(Agent):
         self._max_velocity = max_vel
         self._heading = Vector2(0, 0)
         self._mass = mass
+        self._wanderang = 330
         self._wandercirc = SteerAgent(self._name + "(" + "wander" + ")")
         
     def _seek(self, target):
@@ -56,26 +57,28 @@ class SteerAgent(Agent):
         return force
     
     def _wander(self, rad, dist, jit, strength):
-        # NEEDS WORK
-        startrange = Vector2(rad * math.cos(360), rad * math.sin(360))
-        stoprange = Vector2((rad * math.cos(180)), (rad * math.sin(180)))
+        origin = self._position # ORIGIN = AGENT'S VELOCITY NORMALIZED 'SCALED TO 1 UNIT'
+        # origin = origin * dist # SCALE ORIGIN BY DISTANCE
+        # displacement = Vector2(strength, strength) # CREATE A DISPLACEMENT VECTOR
+        self._wanderang = self._wanderang + (random.random() * 1) - (1 * .5) # MATH ON AGENT'S WANDER ANGLE
+        # displacement._x = math.cos(self._wanderang) * displacement.mag() + rad
+        # displacement._y = math.sin(self._wanderang) * displacement.mag() + rad
+        # displacement = displacement + origin
+        # displacement = displacement * rad
 
-        os.system("cls")
-        print str(self._getpos())
-        origin = self._position
+        startrange = Vector2(rad * math.cos(self._wanderang), rad * math.sin(self._wanderang))
+        stoprange = Vector2(-(rad * math.cos(self._wanderang)), -(rad * math.sin(self._wanderang))) 
         start = origin + startrange
         stop = origin + stoprange
+        displacement = self._choice(start, stop)
 
-        first = self._choice(start, stop)
-        second = first + (self._choice(stop, start) * jit)
-        third = second.norm() * rad
-        distance = (self._position._get_x() - third._get_x()) + (self._position._get_y() - third._get_y())
-        fourth = (third + self._heading) * distance
 
-        target = SteerAgent('wander')
-        target._init(fourth, 0, 0)
+        target = SteerAgent('target')
+        target._init(displacement, 0, 0)
         self._wandercirc = target
         return self._seek(target) * strength
+
+
         
     def _getpos(self):
         '''RETURNS TUPLE'''
@@ -128,7 +131,7 @@ class SteerAgent(Agent):
                 # print "FLEE STATE"
 
             if self._current is 'WANDER':
-                self._velocity = self._velocity + (self._wander(10, 80, 2, 2) * deltaTime)
+                self._velocity = self._velocity + (self._wander(20, 10, 2, 10) * deltaTime)
                 self._position = self._position + (self._velocity * deltaTime) * self._mass
                 self._heading = self._velocity.norm()
                 # print self._name, self._heading._get_x(), self._heading._get_y()
