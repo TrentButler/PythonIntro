@@ -27,7 +27,7 @@ class SteerAgent(Agent):
         self._state_machine.AddTransition(('IDLE','WANDER'))
         self._state_machine.AddTransition(('SEEK', 'IDLE'))
         self._state_machine.AddTransition(('SEEK', 'FLEE'))
-        self._state_machine.AddTransition(('SEEK', 'WANDER'))        
+        self._state_machine.AddTransition(('SEEK', 'WANDER'))
         self._state_machine.AddTransition(('FLEE', 'IDLE'))
         self._state_machine.AddTransition(('FLEE', 'SEEK'))
         self._state_machine.AddTransition(('FLEE', 'WANDER'))
@@ -41,7 +41,8 @@ class SteerAgent(Agent):
         self._max_velocity = max_vel
         self._heading = Vector2(0, 0)
         self._mass = mass
-        self._wanderang = 330
+        self._force = Vector2(0, 0)
+        self._wanderang = math.pi / 2
         self._wandercirc = SteerAgent(self._name + "(" + "wander" + ")")
         
     def _seek(self, target):
@@ -56,27 +57,35 @@ class SteerAgent(Agent):
         force = V - self._velocity
         return force
     
-    def _wander(self, rad, dist, jit, strength):
-        origin = self._position # ORIGIN = AGENT'S VELOCITY NORMALIZED 'SCALED TO 1 UNIT'
-        # origin = origin * dist # SCALE ORIGIN BY DISTANCE
-        # displacement = Vector2(strength, strength) # CREATE A DISPLACEMENT VECTOR
-        self._wanderang = self._wanderang + (random.random() * 1) - (1 * .5) # MATH ON AGENT'S WANDER ANGLE
-        # displacement._x = math.cos(self._wanderang) * displacement.mag() + rad
-        # displacement._y = math.sin(self._wanderang) * displacement.mag() + rad
-        # displacement = displacement + origin
-        # displacement = displacement * rad
+    def _wander(self, rad, dist, strength):
+        # NEEDS WORK
+        # origin = (self._position + self._velocity.norm()) - Vector2(dist, dist)  # ORIGIN = AGENT'S VELOCITY NORMALIZED 'SCALED TO 1 UNIT'
+        # origin = self._position + Vector2(dist, dist)
 
-        startrange = Vector2(rad * math.cos(self._wanderang), rad * math.sin(self._wanderang))
-        stoprange = Vector2(-(rad * math.cos(self._wanderang)), -(rad * math.sin(self._wanderang))) 
-        start = origin + startrange
-        stop = origin + stoprange
-        displacement = self._choice(start, stop)
+        os.system("cls")
+        print self._name + str(self._getpos())
+
+        origin = self._velocity.norm()
+        origin = origin * dist # SCALE ORIGIN BY DISTANCE     
+        displacement = Vector2(rad, rad) # CREATE A DISPLACEMENT VECTOR
+        self._wanderang = self._wanderang + (random.random() * 1) - (1 * .5) # MATH ON AGENT'S WANDER ANGLE
+        displacement._x = math.cos(self._wanderang) * displacement.mag()
+        displacement._y = math.sin(self._wanderang) * displacement.mag()
+        displacement = displacement + origin
+        
+
+        
+        # startrange = Vector2(rad * math.cos(self._wanderang), rad * math.sin(self._wanderang))
+        # stoprange = Vector2(-(rad * math.cos(self._wanderang)), (rad * math.sin(self._wanderang)))
+        # start = origin + startrange
+        # stop = origin + stoprange
+        # displacement = self._choice(start, stop)
 
 
         target = SteerAgent('target')
-        target._init(displacement, 0, 0)
+        target._init(displacement + self._position, 0, 0)   
         self._wandercirc = target
-        return self._seek(target) * strength
+        return displacement
 
 
         
@@ -102,39 +111,46 @@ class SteerAgent(Agent):
     
     def _run(self, deltaTime, target):
         if super(SteerAgent, self)._run():
-
             self._current = self._state_machine.currentstate
 
             if self._current is 'INIT':
                 self._state_machine.ChangeState('IDLE')
 
             if self._current is 'IDLE':
-                accel = self._velocity * deltaTime
-                force = accel * self._mass
-                self._position = self._position + force
-                self._heading = self._velocity.norm()
+                accel = self._force * self._mass
+                self._velocity = self._velocity + (accel * deltaTime)
+                self._force = Vector2(0, 0)
+
                 # print self._name, self._heading._get_x(), self._heading._get_y()          
                 # print "IDLE STATE"
 
             if self._current is 'SEEK':
-                self._velocity = self._velocity + (self._seek(target) * deltaTime)
-                self._position = self._position + (self._velocity * deltaTime) * self._mass
-                self._heading = self._velocity.norm()
+                self._force = self._seek(target)
+                accel = self._force * self._mass
+                self._velocity = self._velocity + (accel * deltaTime)
+                self._force = Vector2(0, 0)
+
                 print self._name, self._heading._get_x(), self._heading._get_y()
                 # print "SEEK STATE"
 
             if self._current is 'FLEE':
-                self._velocity = self._velocity + (self._flee(target) * deltaTime)
-                self._position = self._position + (self._velocity * deltaTime) * self._mass
-                self._heading = self._velocity.norm()
+                self._force = self._flee(target)
+                accel = self._force * self._mass
+                self._velocity = self._velocity + (accel * deltaTime)
+                self._force = Vector2(0, 0)
                 # print self._name, self._heading._get_x(), self._heading._get_y()
                 # print "FLEE STATE"
 
             if self._current is 'WANDER':
-                self._velocity = self._velocity + (self._wander(20, 10, 2, 10) * deltaTime)
-                self._position = self._position + (self._velocity * deltaTime) * self._mass
-                self._heading = self._velocity.norm()
+                self._force = self._wander(80, 20, 1)
+                accel = self._force * self._mass
+                self._velocity = self._velocity + (accel * deltaTime)
+                self._force = Vector2(0, 0)
+
                 # print self._name, self._heading._get_x(), self._heading._get_y()
                 # self._wandercirc = self._wander(60, 100, 45, 2)
                 # print "WANDER"
-                
+            
+            self._position = self._position + (self._velocity * deltaTime)
+            self._heading = self._velocity.norm()
+

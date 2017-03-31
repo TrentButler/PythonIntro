@@ -13,6 +13,9 @@ class Vector2(object):
 
     def _get_y(self):
         return self._y
+    
+    def __str__(self):
+        return "(" + str(self._x) + ", " + str(self._y) + ")"
 
     def mag(self):
         '''MAGNITUDE'''

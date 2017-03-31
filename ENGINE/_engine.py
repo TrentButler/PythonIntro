@@ -9,7 +9,7 @@ class Engine(object):
         # self._events = self.engine.event.get()
         self._clock = self.engine.time.Clock()
         self._timer = 0.0        
-        self._fps = 30
+        self._fps = 60
         self._running = True
 
     def _startup(self, func):
@@ -25,7 +25,7 @@ class Engine(object):
                 if self.engine.key.get_pressed()[self.engine.K_ESCAPE]:
                     self._running = False
 
-        if self._running is False:            
+        if self._running is False:
             return False
 
         return True     
