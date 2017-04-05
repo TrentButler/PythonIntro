@@ -1,3 +1,4 @@
+from AStar import *
 class Node(object):
     '''data'''
 
@@ -116,7 +117,7 @@ def testfunc(astarfunc):
     for i in unwalkable:
         copygraph[i].walkable = False
 
-    result = astarfunc(start, goal, copygraph)
+    result = astar(start, goal, copygraph)
 
     expectedres = []
     for i in expected:
@@ -131,12 +132,12 @@ def testfunc(astarfunc):
         start.guid), int(goal.guid), unwalkable)
     line3 = str.format(
         'expected result {0} \nactual   result {1}\n', expectedres, actualres)
-  #  if actualres == expectedres:
-     #   print '========PASS TEST========='
-    #else:
-      #  print '!!!!!!!!FAIL TEST!!!!!!!!!'
+    if actualres == expectedres:
+        print '========PASS TEST========='
+    else:
+        print '!!!!!!!!FAIL TEST!!!!!!!!!'
 
-    #print line1, line2, line3
+    print line1, line2, line3
     return actualres == expectedres
 
 
