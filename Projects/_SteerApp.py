@@ -24,17 +24,17 @@ class SteerApp(Engine):
 
     def _collisioncheck(self):
         # NEEDS WORK
+        
         for agent in self._agentList:
-            agentONE = Vector2(int(agent._position._get_x()) + self._size, int(agent._position._get_y()) + self._size)
-            for checking in self._agentList:
-                agentTWO = Vector2(int(checking._position._get_x()) + self._size, int(checking._position._get_y()) + self._size)
-                if checking is agent:
-                    continue
-                if agentONE == agentTWO:
-                    agent._velocity = Vector2(0,0)
-                    checking._velocity = Vector2(0,0)
-                    print "COLLISION"
-
+            if len(agent._hitbox) > 0:
+                for checking in self._agentList:
+                    if checking is agent:
+                        continue
+                
+                    # min_x = agent._hitbox[0][0]
+                    # max_x = agent._hitbox[1][0]
+                    # min_y = agent._hitbox[0][1]
+                    # max_y = agent._hitbox[1][1]
                 
         for agent in self._agentList:
             if agent._getpos()[0] >= self._boundary[0] - self._size:
@@ -73,14 +73,11 @@ class SteerApp(Engine):
         if super(SteerApp, self)._draw() is False:
             return False
         for agent in self._agentList:
-            self.engine.draw.circle(self._screen, (0, 255, 0), (int(agent._getpos()[0]), int(agent._getpos()[1])), self._size)
+            self.engine.draw.circle(self._screen, (0, 255, 0), (int(agent._getpos()[0]), int(agent._getpos()[1])), agent._mass)
             if agent._current is 'WANDER':
                 self.engine.draw.line(self._screen, (255, 255, 255), (int(agent._getpos()[0]), int(agent._getpos()[1])), (int(agent._wandercirc._getpos()[0]), int(agent._wandercirc._getpos()[1])), 4)
-            pointA = (agent._position._get_x() + self._size / 2, agent._position._get_y())
-            pointB = (agent._position._get_x() - self._size / 2, agent._position._get_y())
-            pointC = (100, agent._heading._get_y() + 100)
-            self.engine.draw.lines(self._screen, (0, 255, 0), True, [pointA, pointB, (agent._heading._get_x(), agent._heading._get_y())])
-        self.engine.draw.circle(self._screen, (255,255,255), (int(self._mouseAgent._getpos()[0]), int(self._mouseAgent._getpos()[1])), self._size, 4)
+            self.engine.draw.circle(self._screen, (255,255,255), (int(self._mouseAgent._getpos()[0]), int(self._mouseAgent._getpos()[1])), 30, 4)
+            self.engine.draw.lines(self._screen, (244,244,244), True, [(agent._hitbox[0]._get_x(), agent._hitbox[0]._get_y()), (agent._hitbox[1]._get_x(), agent._hitbox[1]._get_y())], 1)
         # self.engine.draw.circle(self._screen, (255,255,255), (int(self._target._getpos()[0]), int(self._target._getpos()[1])), 30)
         return True
 
@@ -132,9 +129,9 @@ app = SteerApp((1200, 600))
 
 agent_one = SteerAgent('agent_one')
 agent_two = SteerAgent('agent_two')
-agent_one._init(Vector2(0, app._boundary[1] / 2), 100, 1)
-agent_two._init(Vector2(app._boundary[0], app._boundary[1] / 2), 60, 1)
+agent_one._init(Vector2(0, app._boundary[1] / 2), 10, 20)
+agent_two._init(Vector2(app._boundary[0], app._boundary[1] / 2), 10, 20)
 
 app._addAgent(agent_one)
-# app._addAgent(agent_two)
+app._addAgent(agent_two)
 app.run()

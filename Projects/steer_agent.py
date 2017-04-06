@@ -10,8 +10,6 @@ class SteerAgent(Agent):
 
     def __init__(self, name):
         super(SteerAgent, self).__init__(name)
-    
-    def _init(self, posVec, max_vel, mass):
         self._state_machine = _FSM()
         self._current = None
 
@@ -35,15 +33,18 @@ class SteerAgent(Agent):
         self._state_machine.AddTransition(('WANDER', 'SEEK'))
         self._state_machine.AddTransition(('WANDER', 'FLEE'))
         
-        self._state_machine.StartMachine('INIT')        
+        self._state_machine.StartMachine('INIT')
+    
+    def _init(self, posVec, max_vel, mass):
         self._position = posVec
         self._velocity = Vector2(0, 0)
         self._max_velocity = max_vel
         self._heading = Vector2(0, 0)
         self._mass = mass
         self._force = Vector2(0, 0)
-        self._wanderang = math.pi / 2
+        self._wanderang = math.pi / 4
         self._wandercirc = SteerAgent(self._name + "(" + "wander" + ")")
+        self._hitbox = []
         
     def _seek(self, target):
         new = self._getdist(target)
@@ -67,13 +68,11 @@ class SteerAgent(Agent):
 
         origin = self._velocity.norm()
         origin = origin * dist # SCALE ORIGIN BY DISTANCE     
-        displacement = Vector2(rad, rad) # CREATE A DISPLACEMENT VECTOR
+        displacement = Vector2(strength, strength) # CREATE A DISPLACEMENT VECTOR
         self._wanderang = self._wanderang + (random.random() * 1) - (1 * .5) # MATH ON AGENT'S WANDER ANGLE
         displacement._x = math.cos(self._wanderang) * displacement.mag()
         displacement._y = math.sin(self._wanderang) * displacement.mag()
         displacement = displacement + origin
-        
-
         
         # startrange = Vector2(rad * math.cos(self._wanderang), rad * math.sin(self._wanderang))
         # stoprange = Vector2(-(rad * math.cos(self._wanderang)), (rad * math.sin(self._wanderang)))
@@ -81,13 +80,10 @@ class SteerAgent(Agent):
         # stop = origin + stoprange
         # displacement = self._choice(start, stop)
 
-
         target = SteerAgent('target')
         target._init(displacement + self._position, 0, 0)   
         self._wandercirc = target
         return displacement
-
-
         
     def _getpos(self):
         '''RETURNS TUPLE'''
@@ -112,6 +108,11 @@ class SteerAgent(Agent):
     def _run(self, deltaTime, target):
         if super(SteerAgent, self)._run():
             self._current = self._state_machine.currentstate
+
+            topleft = self._position + Vector2(-self._mass, self._mass)
+            bottomright = self._position + Vector2(self._mass, -self._mass)
+
+            self._hitbox = [topleft, bottomright]
 
             if self._current is 'INIT':
                 self._state_machine.ChangeState('IDLE')
@@ -142,7 +143,7 @@ class SteerAgent(Agent):
                 # print "FLEE STATE"
 
             if self._current is 'WANDER':
-                self._force = self._wander(80, 20, 1)
+                self._force = self._wander(100, 100, 1)
                 accel = self._force * self._mass
                 self._velocity = self._velocity + (accel * deltaTime)
                 self._force = Vector2(0, 0)
