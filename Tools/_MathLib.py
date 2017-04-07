@@ -68,6 +68,8 @@ class Vector2(object):
     def __neg__(self):
         return Vector2(-self._get_x(), -self._get_y())
 
+    def __abs__(self):
+        return Vector2(abs(self._x), abs(self._y))
 
 class Vector3(object):
     '''VECTOR3'''
