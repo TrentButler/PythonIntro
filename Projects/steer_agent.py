@@ -44,7 +44,7 @@ class SteerAgent(Agent):
         self._mass = mass
         self._size = mass * 20
         self._force = Vector2(0, 0)
-        self._wanderang = math.pi
+        self._wanderang = math.pi / 4
         self._wandercirc = SteerAgent(self._name + "(" + "wander" + ")")
         self._hitbox = []
         
@@ -85,7 +85,7 @@ class SteerAgent(Agent):
         target = SteerAgent('target')
         target._init(displacement + self._position, 0, 0)   
         self._wandercirc = target
-        return displacement
+        return displacement.norm()
         
     def _getpos(self):
         '''RETURNS TUPLE'''
@@ -118,7 +118,7 @@ class SteerAgent(Agent):
             topleft = self._position + Vector2(-self._mass, self._mass)
             bottomright = self._position + Vector2(self._mass, -self._mass)
 
-            # self._hitbox = [topleft, bottomright]
+            self._hitbox = [topleft, bottomright]
             self._hitbox = [self._position._get_x(), self._position._get_y(), self._size, self._size]
 
             if self._current is 'INIT':
@@ -127,7 +127,7 @@ class SteerAgent(Agent):
             if self._current is 'IDLE':
                 accel = self._force * self._mass
                 self._velocity = self._velocity + (accel * deltaTime)
-                self._force = Vector2(0, 0)
+                # self._force = Vector2(0, 0)
 
                 # print self._name, self._heading._get_x(), self._heading._get_y()          
                 # print "IDLE STATE"
@@ -136,7 +136,7 @@ class SteerAgent(Agent):
                 self._force = self._seek(target)
                 accel = self._force * self._mass
                 self._velocity = self._velocity + (accel * deltaTime)
-                self._force = Vector2(0, 0)
+                # self._force = Vector2(0, 0)
 
                 print self._name, self._heading._get_x(), self._heading._get_y()
                 # print "SEEK STATE"
@@ -145,15 +145,15 @@ class SteerAgent(Agent):
                 self._force = self._flee(target)
                 accel = self._force * self._mass
                 self._velocity = self._velocity + (accel * deltaTime)
-                self._force = Vector2(0, 0)
+                # self._force = Vector2(0, 0)
                 # print self._name, self._heading._get_x(), self._heading._get_y()
                 # print "FLEE STATE"
 
             if self._current is 'WANDER':
-                self._force = self._wander(600, 0, 6)
+                self._force = self._wander(100, 2, 1)
                 accel = self._force * self._mass
                 self._velocity = self._velocity + (accel * deltaTime)
-                self._force = Vector2(0, 0)
+                # self._force = Vector2(0, 0)
 
                 # print self._name, self._heading._get_x(), self._heading._get_y()
                 # self._wandercirc = self._wander(60, 100, 45, 2)

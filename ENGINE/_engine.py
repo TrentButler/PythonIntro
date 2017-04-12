@@ -6,7 +6,6 @@ class Engine(object):
         self.engine = pygame
         self.engine.init()
         self._screen = self.engine.display.set_mode(screenbounds)
-        # self._events = self.engine.event.get()
         self._clock = self.engine.time.Clock()
         self._timer = 0.0        
         self._fps = 60
