@@ -1,5 +1,6 @@
 import sys
-sys.path.insert(0, 'C:\Users\Redtrent\Documents\GitHub\PythonIntro')
+# sys.path.insert(0, 'C:\Users\Redtrent\Documents\GitHub\PythonIntro')
+sys.path.insert(0, 'C:\Users\\trent.butler\Documents\GitHub\PythonIntro')
 from ENGINE._engine import Engine
 from Tools._MathLib import Vector2
 from _steer_agent import SteerAgent

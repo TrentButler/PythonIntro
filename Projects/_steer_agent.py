@@ -75,7 +75,7 @@ class SteerAgent(Agent):
         self._wanderang = self._wanderang + (self._random.random() * 1) - (1 * .5) # MATH ON AGENT'S WANDER ANGLE TO GET RANDOM ANGLE
         displacement._x = math.cos(self._wanderang) * displacement.mag() # DO COS(ANGLE) FOR DISPLACEMENT VECTOR X, SCALE BY THE MAGNITUDE OF THE DISPLACEMENT VECTOR
         displacement._y = math.sin(self._wanderang) * displacement.mag() # DO SIN(ANGLE) FOR DISPLACEMENT VECTOR Y, SCALE BY THE MAGNITUDE OF THE DISPLACEMENT VECTOR
-        displacement = displacement + origin # ADD ORIGIN TO THE DISPLACEMENT, 
+        displacement = displacement + origin # ADD ORIGIN TO THE DISPLACEMENT
 
         target = SteerAgent('target')
         target._init(displacement + self._position, 0, 0)   
@@ -135,7 +135,7 @@ class SteerAgent(Agent):
                 self._velocity = self._velocity + (accel * deltaTime)
 
             if self._current is 'WANDER':
-                self._force = self._wander(600, 80, 10)
+                self._force = self._wander(600, 80, 100)
                 accel = self._force * self._mass
                 self._velocity = self._velocity + (accel * deltaTime)
             
