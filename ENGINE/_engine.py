@@ -1,8 +1,9 @@
 import pygame
 
 class Engine(object):
-    '''ENGINE'''
+    '''SUPER ENGINE'''
     def __init__(self,screenbounds):
+        '''INITILIZE PYGAME WITH SPECIFIC BOUNDS, TIMER, SET FPS'''
         self.engine = pygame
         self.engine.init()
         self._screen = self.engine.display.set_mode(screenbounds)
@@ -12,13 +13,14 @@ class Engine(object):
         self._running = True
 
     def _startup(self, func):
+        '''INVOKE START UP FUNCTION, RETURN TRUE IF SUCCESSFUL'''
         func()
         return True
 
     def _update(self):
+        '''CALCULATE DELTATIME, QUERY EVENTS, RETURN TRUE IF SUCCESSFUL'''
         self._timer = float(self._clock.get_time()) / 1000.0
 
-        # print self._timer       
         for event in self.engine.event.get():
             if event.type == self.engine.KEYDOWN:
                 if self.engine.key.get_pressed()[self.engine.K_ESCAPE]:
@@ -30,13 +32,11 @@ class Engine(object):
         return True     
 
     def _draw(self):
-        # func()
-        # self.engine.draw.circle(self._screen, (255,255,255), (90,90), 20)
-        # self.engine.display.flip()
+        '''DRAW, RETURN TRUE IF SUCCESSFUL'''
         return True
-        
 
     def _shutdown(self):
-        print "shutdown"
+        '''UNINITILIZE PYGAME'''
+        print "SHUTDOWN"
         self.engine.quit()
         

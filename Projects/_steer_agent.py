@@ -3,12 +3,13 @@ from FSM._FSM import _FSM
 from AGENT._agent import Agent
 import random
 import math
-import os # DEBUG USE
+import os
 
 class SteerAgent(Agent):
-    '''STEER AGENT'''
+    '''STEER BEHAVIOR AGENT'''
 
     def __init__(self, name):
+        '''ASSIGN IDENTIFIER TO AGNET, INITILIZE AGENT FSM, INITILIZE RANDOM CLASS'''
         super(SteerAgent, self).__init__(name)
         self._state_machine = _FSM()
         self._current = None
@@ -37,6 +38,7 @@ class SteerAgent(Agent):
         self._random = random
     
     def _init(self, posVec, max_vel, mass):
+        '''ASSIGN AGENT POSITION, AGENT MAXIMUM VELOCITY, AGENT MASS'''
         self._position = posVec
         self._velocity = Vector2(0, 0)
         self._max_velocity = max_vel
@@ -81,38 +83,37 @@ class SteerAgent(Agent):
         V = displacement.norm() * self._max_velocity # NORMALIZE THE DISPLACEMENT, SCALE BY AGENT MAX VELOCITY
         force = V - self._velocity # SUBTRACT DISPLACEMENT VECTOR FROM AGENT CURRENT VELOCITY, TO GET FORCE REQUIRED TO CHANGE AGENT DIRECTION
         return force # RETURN FORCE
+
+        
         
     def _getpos(self):
-        '''RETURNS TUPLE'''
+        '''RETURN A TUPLE FROM THE AGENT'S POSITION VECTOR'''
         return (self._position._get_x(), self._position._get_y())
     
     def _getdist(self, target):
-        # _xdist = self._getpos()[0] - target._getpos()[0]
+        '''RETURN THE DISTANCE OF AGENT TO A TARGET, RETURN AS VECTOR2'''
         _xdist = target._getpos()[0] - self._getpos()[0]
-        # _ydist = self._getpos()[1] - target._getpos()[1]
         _ydist = target._getpos()[1] - self._getpos()[1]
+
         return Vector2(_xdist, _ydist)
+
     def _dist(self, target):
+        '''RETURN THE DISTANCE OF AGENT TO A TARGET, RETURN AS INTEGER'''
         xdist = abs(self._position._get_x() - target._position._get_x())
         ydist = abs(self._position._get_y() - target._position._get_y())
+
         return xdist + ydist
     
-    def _choice(self, start, stop):
-        # x = random.randint(int(start._get_x()), int(stop._get_x()))
-        # y = random.randint(int(start._get_y()), int(stop._get_y()))
-
-        x = random.uniform(start._get_x(), stop._get_x())
-        y = random.uniform(start._get_y(), stop._get_y())
-
-        return Vector2(x, y)
-    
     def _run(self, deltaTime, target):
+        '''CHECK FOR CHANGE IN AGENT STATE, APPLY FORCES BASED ON DELTATIME, APPLY FORCES BASED ON TARGET'''
         if super(SteerAgent, self)._run():
             self._current = self._state_machine.currentstate
 
+            # GENERATE AGENT HITBOX
             topleft = self._position + Vector2(-self._mass, self._mass)
             bottomright = self._position + Vector2(self._mass, -self._mass)
 
+            # USED FOR AGENT COLLISION
             self._hitbox = [topleft, bottomright]
             self._hitbox = [self._position._get_x(), self._position._get_y(), self._size, self._size]
 
@@ -122,39 +123,22 @@ class SteerAgent(Agent):
             if self._current is 'IDLE':
                 accel = self._force * self._mass
                 self._velocity = self._velocity + (accel * deltaTime)
-                # self._force = Vector2(0, 0)
-
-                # print self._name, self._heading._get_x(), self._heading._get_y()          
-                # print "IDLE STATE"
 
             if self._current is 'SEEK':
                 self._force = self._seek(target)
                 accel = self._force * self._mass
                 self._velocity = self._velocity + (accel * deltaTime)
-                # self._force = Vector2(0, 0)
-
-                print self._name, self._heading._get_x(), self._heading._get_y()
-                # print "SEEK STATE"
 
             if self._current is 'FLEE':
                 self._force = self._flee(target)
                 accel = self._force * self._mass
                 self._velocity = self._velocity + (accel * deltaTime)
-                # self._force = Vector2(0, 0)
-                # print self._name, self._heading._get_x(), self._heading._get_y()
-                # print "FLEE STATE"
 
             if self._current is 'WANDER':
-                self._force = self._wander(600, 80, 20)
+                self._force = self._wander(600, 80, 10)
                 accel = self._force * self._mass
                 self._velocity = self._velocity + (accel * deltaTime)
-                # self._force = Vector2(0, 0)
-
-                # print self._name, self._heading._get_x(), self._heading._get_y()
-                # self._wandercirc = self._wander(60, 100, 45, 2)
-                # print "WANDER"
             
             self._position = self._position + (self._velocity * deltaTime)
             self._heading = self._velocity.norm()
             self._force = Vector2(0, 0)
-

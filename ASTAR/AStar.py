@@ -6,9 +6,6 @@ def GetDistance(one, two):
     yDist = abs(two[1] - one[1])
     return xDist + yDist
 
-def GetAdjacentList(node, grid):
-    return getneighbors(node, grid)
-
 def Retrace(end):
     retraced = []
     currentNode = end
@@ -46,7 +43,7 @@ def AStarAlgorithum(start, goal, environment):
             result = Retrace(current) # RESULT IS ASSIGNED THE LIST FROM FUNCTION 'RETRACE()'
             break
         
-        adjList = GetAdjacentList(current, environment)  # GET CURRENTNODE'S ADJACENTS
+        adjList = getneighbors(current, environment)  # GET CURRENTNODE'S ADJACENTS
         
         for node in adjList:  # CHECK ALL ADJACENT NODES FOR BEST PATH
             if node in closedlist or node.walkable is False: # IF NODE IS IN THE CLOSED LIST OR NOT WALKABLE, CONTINUE THE SEARCH
